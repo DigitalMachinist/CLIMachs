@@ -1,0 +1,1 @@
+Print out whether an actor has acted yet, how many turns they have completed, and the initiative order upcoming until their next turn begins.
