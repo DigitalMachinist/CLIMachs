@@ -13,7 +13,7 @@ init act [<tokens>] ...
 
 ## Description
 
-Init act ends the wait actions of the supplied tokens and inserts them back into the initiative order before the current turn.
+Init act ends the wait actions of the supplied tokens and inserts them back into the initiative order before the current turn. If this command is not called for a waiting token before its next turn, the wait action is cancelled once their next run begins.
 
 The opposite of this command is [init-wait](init-wait.md).
 
