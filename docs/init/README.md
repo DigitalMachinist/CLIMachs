@@ -3,7 +3,7 @@
 
 ## Name
 
-init - a simple and powerful initiative order command set
+init - A simple and powerful initiative order command set.
 
 ## Synopsis
 
@@ -13,7 +13,7 @@ init <command> [<args>] ...
 
 ## Description
 
-Init is a simple POSIX-style chat-message-driven command set to make making initiative order in Roll20.net campaigns easy to manage. 
+Init is a complete POSIX-style chat-message-driven command set designed to make initiative order in Roll20.net campaigns easy to manage. 
 
 Init commands are only accessible to GMs, but it is possible to install companion scripts to make certain actions available to all players (such as ending their own turn or viewing the initiative order).
 
