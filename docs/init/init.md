@@ -7,7 +7,9 @@ init - a simple and powerful initiative order command set
 
 ## Synopsis
 
-init \<command\> \[\<args\>\] ...
+```
+init <command> [<args>] ...
+```
 
 ## Description
 
@@ -25,21 +27,28 @@ The command arguments expected by the given command. See the manual of the parti
 
 ## Commands
 
+Init provides some commands that are available to all players and others that only the GM can use. Player command usage is restricted to only the player's token and commands will only be accepted at appropriate times (typically during the player's turn). The GM, however, has full access to the command set at any time to use as they wish.
+
+### All Players
+
   - [init-act](init-act.md): End the wait actions of tokens.
-  - [init-add](init-add.md): Add tokens to the initiative order.
-  - [init-clear](init-clear.md): Clear the initiative order of all tokens.
-  - [init-config](init-config.md): Get or set Init configuration variables.
   - [init-help](init-help.md): Display a short list of instructions and simple examples of usage.
   - [init-info](init-info.md): Display helpful initiative info about a token.
-  - [init-move](init-move.md): Move a token in the initiative order.
   - [init-next](init-next.md): Advance to the next token's turn.
   - [init-order](init-order.md): Display the initiative order for one complete round.
   - [init-prev](init-prev.md): Reverse back to the previous token's turn.
+  - [init-wait](init-wait.md): Begin wait actions for tokens.
+
+### GM Only
+
+  - [init-add](init-add.md): Add tokens to the initiative order.
+  - [init-clear](init-clear.md): Clear the initiative order of all tokens.
+  - [init-config](init-config.md): Get or set Init configuration variables.
+  - [init-move](init-move.md): Move a token in the initiative order.
   - [init-round](init-round.md): Get or set the current round counter.
   - [init-remove](init-remove.md): Remove a token from the initiative order.
   - [init-start](init-start.md): Start counting turns from the token with the highest initiative.
   - [init-turn](init-turn.md): Get or set the token currently taking its turn.
-  - [init-wait](init-wait.md): Begin wait actions for tokens.
 
 ## Author's Notes
 
@@ -53,10 +62,17 @@ Init is dependent upon [Manveti](https://app.roll20.net/users/503018/manveti)'s 
 
 My intention for Init is to incorporate it into a small ecosystem of commands that all interoperate and provide compatibility for a wide range of RPG systems.
 
-Status effect tracking is a natural next-step feature. In order to make tracking of status effects play into rolls usefully across a range of RPG systems, a plugin system to provide hooks for different types of character sheets will be necessary.
+I would love to provide an interface for graphical controls and feedback akin to those provided by [The Aaron](https://app.roll20.net/users/104025/the-aaron)'s [Turn Marker](https://wiki.roll20.net/Script:Turn_Marker). This isn't high priority, but would probably make this script much more popular amongst less UNIX-nerd-ish devs.
+
+Status effect tracking is also a natural next-step feature. In order to make tracking of status effects play into rolls usefully across a range of RPG systems, a plugin system to provide hooks for different types of character sheets will be necessary.
 
 For the immediate future, expect status effect tracking that is superficial but integrated with initiative tracking to handle durations of effect. However, once I build a Cypher System character sheet, I can move ahead on a module to hook into that sheet and generalize its behaviour to character sheets for other RPG systems (so long as someone is willing to write extensions for the sheets they intend to use).
 
 Anyway, all of this is very ambitious. I'll probably tire of all of this, but my goal is to make all of the tools I need to smoothly run a Cypher System game using Roll20, and hopefully provide something of value to the players of other RPG systems while I'm at it.
 
+If you would like to contribute to this project, contact me using one of the links below or just go ahead and submit a PR and we'll talk!
+
 Wish me luck!
+
+
+@DigitalMachinist - [Roll20](https://app.roll20.net/users/554530/jeff-r) - [GitHub](https://github.com/DigitalMachinist)

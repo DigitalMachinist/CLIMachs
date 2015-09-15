@@ -3,15 +3,21 @@
 
 ## Name
 
-init move - 
+init move - Move tokens in the initiative order (GM only).
 
 ## Synopsis
 
-init move \<roll\> \[\<tokens\>\] ... \[--quiet|-q\] 
+```
+init move <roll> [<tokens>] ...
+```
 
 ## Description
 
-Init move 
+Init move moves tokens in the initiative order using the current selection.
+
+This allows several tokens to be moved in the initiative order simultaneously and easily, as long as they have similar initiative stats.
+
+This command is permitted only as the GM.
 
 ## Options
 
@@ -21,28 +27,25 @@ The initiative test result for the token(s) to be moved to in the initiative ord
 ### \<tokens\>
 The names of one or more tokens. If multiple tokens with the same name exist and are matched, all will be moved in the initiative order. If no names are provided, the currently selected tokens will be moved in the initiative order by default (if any).
 
-### --quiet, -q
-If this option is enabled, chat message output will be whispered only to the player who caused this command to be run, rather than to all players.
-
 ## Output
 
-If this command runs successfully, the names of the tokens added to the initiative order and the value to which they were moved will be returned as chat output to all players (unless the --quiet option is set).
+If this command runs successfully, the names of the tokens added to the initiative order and the value to which they were moved will be returned as chat output to all players.
 
 If an error occurs, the error will whispered to the user who invoked the command, accompanied by a suggestion of appropriate usage.
 
 ## Examples
 
-**init move 18** *(with Gandalf selected)*
+```init move 18``` *(with Gandalf selected)*
 
 > Gandalf moved to initiative order 18.
 
-**init move d20+3** *(with Ringwraith 1 and Ringwraith 2 selected)*
+```init move d20+3``` *(with Ringwraith 1 and Ringwraith 2 selected)*
 
 > Ringwraith 1 moved to initiative order 8.
 >
 > Ringwraith 2 moved to initiative order 15.
 
-**init move d20+3 "Ringwraith 1" "Ringwraith 2"** *(selection doesn't matter)*
+```init move d20+3 "Ringwraith 1" "Ringwraith 2"``` *(selection doesn't matter)*
 
 > Ringwraith 1 moved to initiative order 16.
 >

@@ -3,20 +3,23 @@
 
 ## Name
 
-init next - Advance to the next token's turn.
+init next - Advance to the next token's turn (players and GM).
 
 ## Synopsis
 
-init next \[--quiet|-q\] 
+```
+init next
+```
 
 ## Description
 
-Init next advances the initiiative order to the next token's turn and notifies players.
+Init next advances the initiative order to the next token's turn and notifies players.
+
+This command permitted only for the GM and the player controlling the currently acting token.
 
 ## Options
 
-### --quiet, -q
-If this option is enabled, chat message output will be whispered only to the player who caused this command to be run, rather than to all players.
+n/a
 
 ## Output
 
@@ -26,7 +29,7 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-**init next** *(selection doesn't matter)*
+```init next``` *(selection doesn't matter)*
 
 > Advancing to next turn...
 >
