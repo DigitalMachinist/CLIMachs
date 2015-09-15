@@ -13,9 +13,11 @@ init <command> [<args>] ...
 
 ## Description
 
-Init is a complete POSIX-style chat-message-driven command set designed to make initiative order in Roll20.net campaigns easy to manage. 
+Init is a complete chat-message-driven command set designed to make initiative order in Roll20.net campaigns easy to manage. 
 
-Init commands are only accessible to GMs, but it is possible to install companion scripts to make certain actions available to all players (such as ending their own turn or viewing the initiative order).
+The commands provided by Init allow the GM to perform just about any initiative-related task with relative ease, using only chat commands. Players have access to only the commands that they need to speed up the turn order, and they only have access when they need to have access (typically when it's their turn).
+
+Init commands syntax is in the classic POSIX-style. If you're familiar with terminals such as ```bash``` or even the goold ole' ```DOS Shell```, this was made for you. However, Init is easy to learn and very well-documented, so you'll figure this out in to time regardless of your level of experience. Furthermore, all player commands are even simpler by design, so your players won't get tripped up by weird syntax.
 
 ## Options
 
