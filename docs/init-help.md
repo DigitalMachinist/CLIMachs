@@ -22,7 +22,9 @@ If this option is enabled, chat message output will be sent to all players, rath
 
 ## Output
 
-When executed, this command returns a list of available Init commands along with some examples of basic usage as a chat message ONLY TO THE CALLER. Unlike most commands, ```init help``` does not display to the chat logs of other players unless requested with the --shout option.
+When executed, this command returns a list of available Init commands along with some examples of basic usage as a whisper to only the player that invoked the command. To display to the output as a chat message to all players, use --shout option.
+
+If an error occurs, the error will whispered to the user who invoked the command, accompanied by a suggestion of appropriate usage.
 
 ## Examples
 

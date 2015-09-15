@@ -20,7 +20,7 @@ If this option is enabled, chat message output will be whispered only to the pla
 
 ## Output
 
-If this command runs successfully, the labels of the tokens added to the initiative order and the value at which they were added will be returned as chat output to all players (unless the --quiet option is set).
+If this command runs successfully, a confirmation that the initiative order has been cleared will be returned as chat output to all players (unless the --quiet option is set).
 
 If an error occurs, the error will whispered to the user who invoked the command, accompanied by a suggestion of appropriate usage.
 

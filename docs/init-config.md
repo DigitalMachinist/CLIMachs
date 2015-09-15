@@ -11,7 +11,7 @@ init config \[\<key\> \[\<value\>\]\] \[--quiet|-q\]
 
 ## Description
 
-Init clear gets or sets configuration variables that control how Init behaves for all players in the campaign.
+Init config gets or sets configuration variables that control how Init behaves for all players in the campaign.
 
 To set a variable to a new value, include the key of the variable followed by its new value in your command (e.g. ```init config announceTurns true```).
 
@@ -28,7 +28,7 @@ If supplied with a \<key\>, the variable at the given \<key\> will be set to thi
 ### --quiet, -q
 If this option is enabled, chat message output will be whispered only to the player who caused this command to be run, rather than to all players.
 
-## Variables
+## Configuration Variables
 
 The following variables can be observed and set using this command: 
 
