@@ -14,6 +14,7 @@ A character sheet and accompanying scripts to make for quick turns in Monte Cook
 
 ## Back Burner
 
+  - cond
   - init-act
   - init-config
   - init-info

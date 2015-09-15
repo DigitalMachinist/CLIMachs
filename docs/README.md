@@ -6,11 +6,11 @@ This collection of chat commands can be used together in a Roll20 game to enhanc
 
 ## Command Manual Pages (man-style)
 
+### [cond Manual](cond/cond.md)
+Cond is a condition tracking system. It allows the GM and their players to keep track conditions easily and display them graphically as icons on tokens using a chat-message-driver command interface.
+
 ### [init Manual](init/init.md)
 Init is a initiative tracking system. It gives the GM and their players the tools to easily manage initiative order, including more complex actions like wait/delay actions. It has a complete chat-message-driven command interface for doing anything a GM and his/her players might want to do with initiative (within reason).
-
-### [stat Manual](stat/stat.md)
-Stat is a status effect tracking system. It allows the GM and their players to keep track status effects easily and display them graphically as icons on tokens using a chat-message-driver command interface.
 
 ## Developer's Notes
 
@@ -26,9 +26,9 @@ My intention for Init is to incorporate it into a small ecosystem of commands th
 
 I would love to provide an interface for graphical controls and feedback akin to those provided by [The Aaron](https://app.roll20.net/users/104025/the-aaron)'s [Turn Marker](https://wiki.roll20.net/Script:Turn_Marker). This isn't high priority, but would probably make this script much more popular amongst less UNIX-nerd-ish devs.
 
-Status effect tracking is also a natural next-step feature. In order to make tracking of status effects play into rolls usefully across a range of RPG systems, a plugin system to provide hooks for different types of character sheets will be necessary.
+Condition tracking is also a natural next-step feature. In order to make conditions play into rolls usefully across a range of RPG systems, a plugin system to provide hooks for different types of character sheets will be necessary so conditions and adjust rolls using character data.
 
-For the immediate future, expect status effect tracking that is superficial but integrated with initiative tracking to handle durations of effect. However, once I build a Cypher System character sheet, I can move ahead on a module to hook into that sheet and generalize its behaviour to character sheets for other RPG systems (so long as someone is willing to write extensions for the sheets they intend to use).
+For the immediate future, expect condition tracking that is superficial but integrated with initiative tracking to handle durations of effect. However, once I build a Cypher System character sheet, I can move ahead on a module to hook into that sheet and generalize its behaviour to character sheets for other RPG systems (so long as someone is willing to write extensions for the sheets they intend to use).
 
 Anyway, all of this is very ambitious. I'll probably tire of all of this, but my goal is to make all of the tools I need to smoothly run a Cypher System game using Roll20, and hopefully provide something of value to the players of other RPG systems while I'm at it.
 
