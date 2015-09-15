@@ -21,7 +21,7 @@ This command is permitted only as the GM.
 
 ## Options
 
-### \<tokens\>
+### \<tokens\> (optional)
 The names of one or more tokens. If multiple tokens with the same name exist and are matched, all will be removed from the initiative order. If no names are provided, the currently selected tokens will be removed from the initiative order by default (if any).
 
 ## Output

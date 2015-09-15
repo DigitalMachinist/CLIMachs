@@ -24,7 +24,7 @@ Init commands syntax is in the classic POSIX-style. If you're familiar with term
 ### \<command\>
 The Init command to be executed (available commands listed below).
 
-### \<args\>
+### \<args\> (optional)
 The command arguments expected by the given command. See the manual of the particular command you intend to use for further details regarding the arguments it expects.
 
 ## Commands

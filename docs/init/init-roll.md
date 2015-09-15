@@ -22,7 +22,7 @@ This command is permitted only for the GM and by players controlling tokens not 
 ### \<roll\>
 The initiative test result for the token(s) to be added to in the initiative order. If dice roll literals such as d6 or d20 are provided, they will be processed as dice rolls usually are.
 
-### \<token\>
+### \<token\> (optional)
 The name of one token. If multiple tokens with the same name exist and are matched, the command will fail. If no label is provided, and exactly one token is selected, roll will be returned about the currently selected token.
 
 ## Output

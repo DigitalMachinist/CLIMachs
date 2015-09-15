@@ -23,7 +23,7 @@ This command is permitted only as the GM.
 
 ## Options
 
-### \<value\>
+### \<value\> (optional)
 If supplied, the round counter will be set to this value.
 
 ## Output

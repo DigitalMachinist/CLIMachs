@@ -23,10 +23,10 @@ This command is permitted only as the GM.
 
 ## Options
 
-### \<key\>
+### \<key\> (optional)
 The key of the variable to be accessed/mutated by this command (available variables listed below).
 
-### \<value\>
+### \<value\> (optional)
 If supplied with a \<key\>, the variable at the given \<key\> will be set to this value.
 
 ## Configuration Variables

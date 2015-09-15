@@ -23,7 +23,7 @@ This command is permitted only as the GM.
 
 ## Options
 
-### \<token\>
+### \<token\> (optional)
 The name of one token. If multiple tokens with the same name exist and are matched, the command will fail. If no label is provided, and exactly one token is selected, the token's turn will begin immediately.
 
 ## Output

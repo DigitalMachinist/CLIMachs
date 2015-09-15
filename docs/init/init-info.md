@@ -17,7 +17,7 @@ Init info displays whether a token has acted yet, how many turns they have compl
 
 ## Options
 
-### \<token\>
+### \<token\> (optional)
 The name of one token. If multiple tokens with the same name exist and are matched, the command will fail. If no label is provided, and exactly one token is selected, info will be returned about the currently selected token.
 
 This command is permitted as any player or as the GM.

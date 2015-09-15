@@ -21,7 +21,7 @@ This command is permitted only for the GM and by players controlling tokens not 
 
 ## Options
 
-### \<tokens\>
+### \<tokens\> (optional)
 The names of one or more tokens. If multiple tokens with the same name exist and are matched, all will begin wait actions. If no names are provided, the currently selected tokens will be begin wait actions by default (if any). If called by a player on their turn and no tokens are provided, the player's token will begin a wait action.
 
 ## Output

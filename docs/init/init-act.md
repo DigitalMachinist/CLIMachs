@@ -21,7 +21,7 @@ This command is permitted only for the GM and by players whose token is currentl
 
 ## Options
 
-### \<tokens\>
+### \<tokens\> (optional)
 The names of one or more tokens. If multiple tokens with the same name exist and are matched, all will have their wait actions ended. If no names are provided, the currently selected tokens will be added to the initiative order by default (if any). If called by a player with a token performing a wait action and no tokens are provided, the player's token will have its wait action ended.
 
 ## Output
