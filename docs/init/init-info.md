@@ -3,17 +3,17 @@
 
 ## Name
 
-init info - Display helpful initiative info about a token (players and GM).
+init-info - Display helpful initiative info about a token (players and GM).
 
 ## Synopsis
 
 ```
-init info [<token>]
+init-info [<token>]
 ```
 
 ## Description
 
-Init info displays whether a token has acted yet, how many turns they have completed, and the initiative order upcoming until their next turn begins.
+init-info displays whether a token has acted yet, how many turns they have completed, and the initiative order upcoming until their next turn begins.
 
 ## Options
 
@@ -30,13 +30,13 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init info``` *(with Gandalf selected)*
+```init-info``` *(with Gandalf selected)*
 
 > Gandalf has completed 4 turns.
 >
 > Turn Order: Ringwraith 2, Gandalf
 
-```init info Gandalf``` *(selection doesn't matter)*
+```init-info Gandalf``` *(selection doesn't matter)*
 
 > Gandalf has not acted yet (0 turns completed).
 >

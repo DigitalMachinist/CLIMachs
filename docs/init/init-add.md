@@ -3,17 +3,17 @@
 
 ## Name
 
-init add - Add tokens to the initiative order (GM only).
+init-add - Add tokens to the initiative order (GM only).
 
 ## Synopsis
 
 ```
-init add <roll> [<tokens>] ...
+!init-add <roll> [<tokens>] ...
 ```
 
 ## Description
 
-Init add adds tokens to the initiative order using the current selection.
+init-add adds tokens to the initiative order using the current selection.
 
 This allows several tokens to be added to the initiative order simultaneously and easily, as long as they have similar initiative stats.
 
@@ -35,17 +35,17 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init add 18``` *(with Gandalf selected)*
+```init-add 18``` *(with Gandalf selected)*
 
 > Gandalf added at initiative order 18.
 
-```init add d20+3``` *(with Ringwraith 1 and Ringwraith 2 selected)*
+```init-add d20+3``` *(with Ringwraith 1 and Ringwraith 2 selected)*
 
 > Ringwraith 1 added at initiative order 8.
 >
 > Ringwraith 2 added at initiative order 15.
 
-```init add d20+3 "Ringwraith 1" "Ringwraith 2"``` *(selection doesn't matter)*
+```init-add d20+3 "Ringwraith 1" "Ringwraith 2"``` *(selection doesn't matter)*
 
 > Ringwraith 1 added at initiative order 16.
 >

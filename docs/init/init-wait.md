@@ -3,17 +3,17 @@
 
 ## Name
 
-init wait - Begin wait actions for tokens (players and GM).
+init-wait - Begin wait actions for tokens (players and GM).
 
 ## Synopsis
 
 ```
-init wait [<tokens>] ...
+init-wait [<tokens>] ...
 ```
 
 ## Description
 
-Init wait begins wait actions for the supplied tokens. Their turns will begin when either a) the player takes a delayed action or b) their next turn begins.
+init-wait begins wait actions for the supplied tokens. Their turns will begin when either a) the player takes a delayed action or b) their next turn begins.
 
 The opposite of this command is [init-act](init-act.md).
 
@@ -32,22 +32,22 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init wait``` *(as GM, with Gandalf selected)*
+```init-wait``` *(as GM, with Gandalf selected)*
 
 > Gandalf began a wait action.
 
-```init wait``` *(as GM, with Ringwraith 1 and Ringwraith 2 selected)*
+```init-wait``` *(as GM, with Ringwraith 1 and Ringwraith 2 selected)*
 
 > Ringwraith 1 began a wait action.
 >
 > Ringwraith 2 began a wait action.
 
-```init wait "Ringwraith 1" "Ringwraith 2"``` *(as GM, selection doesn't matter)*
+```init-wait "Ringwraith 1" "Ringwraith 2"``` *(as GM, selection doesn't matter)*
 
 > Ringwraith 1 began a wait action.
 >
 > Ringwraith 2 began a wait action.
 
-```init wait``` *(as Gandalf, selection doesn't matter)*
+```init-wait``` *(as Gandalf, selection doesn't matter)*
 
 > Gandalf began a wait action.

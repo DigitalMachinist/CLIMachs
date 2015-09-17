@@ -3,17 +3,17 @@
 
 ## Name
 
-init act - End the wait actions of tokens (players and GM).
+init-act - End the wait actions of tokens (players and GM).
 
 ## Synopsis
 
 ```
-init act [<tokens>] ...
+!init-act [<tokens>] ...
 ```
 
 ## Description
 
-Init act ends the wait actions of the supplied tokens and inserts them back into the initiative order before the current turn. If this command is not called for a waiting token before its next turn, the wait action is cancelled once their next run begins.
+init-act ends the wait actions of the supplied tokens and inserts them back into the initiative order before the current turn. If this command is not called for a waiting token before its next turn, the wait action is cancelled once their next run begins.
 
 The opposite of this command is [init-wait](init-wait.md).
 
@@ -32,22 +32,22 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init act``` *(as GM, with Gandalf selected)*
+```init-act``` *(as GM, with Gandalf selected)*
 
 > Gandalf took action before Ringwraith 1.
 
-```init act``` *(as GM, with Ringwraith 1 and Ringwraith 2 selected)*
+```init-act``` *(as GM, with Ringwraith 1 and Ringwraith 2 selected)*
 
 > Ringwraith 1 took action before Gandalf (initiative order 18).
 >
 > Ringwraith 2 took action before Gandalf (initiative order 18).
 
-```init act --no-move "Ringwraith 1" "Ringwraith 2"``` *(as GM, selection doesn't matter)*
+```init-act --no-move "Ringwraith 1" "Ringwraith 2"``` *(as GM, selection doesn't matter)*
 
 > Ringwraith 1 is no longer waiting (not moved in initiative order).
 >
 > Ringwraith 2 is no longer waiting (not moved in initiative order).
 
-```init wait``` *(as Gandalf, selection doesn't matter)*
+```init-wait``` *(as Gandalf, selection doesn't matter)*
 
 > Gandalf began a wait action.

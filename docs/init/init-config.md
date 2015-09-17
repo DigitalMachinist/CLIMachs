@@ -3,17 +3,17 @@
 
 ## Name
 
-init config - Get or set Init configuration variables (GM only).
+init-config - Get or set Init configuration variables (GM only).
 
 ## Synopsis
 
 ```
-init config [<key> [<value>]]
+init-config [<key> [<value>]]
 ```
 
 ## Description
 
-Init config gets or sets configuration variables that control how Init behaves for all players in the campaign.
+init-config gets or sets configuration variables that control how Init behaves for all players in the campaign.
 
 To set a variable to a new value, include the key of the variable followed by its new value in your command (e.g. ```init config announceTurns true```).
 
@@ -45,10 +45,10 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init config announceTurns```
+```init-config announceTurns```
 
 > Player turn announcements (announceTurns) currently set to TRUE.
 
-```init config announceTurns false```
+```init-config announceTurns false```
 
 > Player turn announcements (announceTurns) now set to FALSE.

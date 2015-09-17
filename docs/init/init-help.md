@@ -3,17 +3,17 @@
 
 ## Name
 
-init help - Display a short list of instructions and simple examples of usage (players and GM).
+init-help - Display a short list of instructions and simple examples of usage (players and GM).
 
 ## Synopsis
 
 ```
-init help
+init-help
 ```
 
 ## Description
 
-Init help returns a list of available Init commands along with some examples of basic usage.
+init-help returns a list of available Init commands along with some examples of basic usage.
 
 For more detailed documentation, view the Init manual (man) pages instead.
 
@@ -31,6 +31,6 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init help``` *(selection doesn't matter)*
+```init-help``` *(selection doesn't matter)*
 
 > Help text (which is much longer than I care to write here!)...

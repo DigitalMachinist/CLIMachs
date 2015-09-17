@@ -3,15 +3,15 @@
 
 ## Name
 
-init clear - Clear the initiative order of all tokens (GM only).
+init-clear - Clear the initiative order of all tokens (GM only).
 
 ## Synopsis
 
-```init clear```
+```init-clear```
 
 ## Description
 
-Init clear removes all tokens from the initiative order and clears Init's own internal round/turn counters so the state of the initiative system is completely refreshed.
+init-clear removes all tokens from the initiative order and clears Init's own internal round/turn counters so the state of the initiative system is completely refreshed.
 
 This command is permitted only as the GM.
 
@@ -27,6 +27,6 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init clear``` *(selection doesn't matter)*
+```init-clear``` *(selection doesn't matter)*
 
 > Initiative order cleared!

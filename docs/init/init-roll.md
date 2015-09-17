@@ -3,17 +3,17 @@
 
 ## Name
 
-init roll - Add a token to the initiative order (players and GM).
+init-roll - Add a token to the initiative order (players and GM).
 
 ## Synopsis
 
 ```
-init roll <roll> [<token>]
+init-roll <roll> [<token>]
 ```
 
 ## Description
 
-Init roll adds a single token to the initiative order. The GM can use this to add a token by name or from the current selection. Players can use this to add their own token to the initiative order.
+init-roll adds a single token to the initiative order. The GM can use this to add a token by name or from the current selection. Players can use this to add their own token to the initiative order.
 
 This command is permitted only for the GM and by players controlling tokens not yet added to the initiative order.
 
@@ -33,14 +33,14 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init roll d20+3``` *(as GM, with Gandalf selected)*
+```init-roll d20+3``` *(as GM, with Gandalf selected)*
 
 > Gandalf added at initiative order 18.
 
-```init roll d20+3 Gandalf``` *(as GM, selection doesn't matter)*
+```init-roll d20+3 Gandalf``` *(as GM, selection doesn't matter)*
 
 > Gandalf added at initiative order 19.
 
-```init roll d20+3``` *(as Gandalf, selection doesn't matter)*
+```init-roll d20+3``` *(as Gandalf, selection doesn't matter)*
 
 > Gandalf added at initiative order 20.

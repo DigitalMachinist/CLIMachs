@@ -8,7 +8,7 @@ init - A simple and powerful initiative order command set.
 ## Synopsis
 
 ```
-init <command> [<args>] ...
+init[-<command> [<args>] ...] [--help|-h] [--version|-v]
 ```
 
 ## Description

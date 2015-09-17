@@ -3,17 +3,17 @@
 
 ## Name
 
-init prev - Reverse back to the previous token's turn (GM only).
+init-prev - Reverse back to the previous token's turn (GM only).
 
 ## Synopsis
 
 ```
-init prev
+init-prev
 ```
 
 ## Description
 
-Init prev reverses the initiative order back to the most recent turn and notifies players.
+init-prev reverses the initiative order back to the most recent turn and notifies players.
 
 This command is permitted only as the GM.
 
@@ -29,7 +29,7 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init prev``` *(selection doesn't matter)*
+```init-prev``` *(selection doesn't matter)*
 
 > Reversing to previous turn...
 >

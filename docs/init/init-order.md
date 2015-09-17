@@ -3,17 +3,17 @@
 
 ## Name
 
-init order - Display the initiative order for one complete round (players and GM).
+init-order - Display the initiative order for one complete round (players and GM).
 
 ## Synopsis
 
 ```
-init order
+init-order
 ```
 
 ## Description
 
-Init order displays the initiative order beginning from the current token's turn and continuing until the same token's turn in the following round.
+init-order displays the initiative order beginning from the current token's turn and continuing until the same token's turn in the following round.
 
 This command is permitted as any player or as the GM.
 
@@ -29,7 +29,7 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init order``` *(on Ringwraith 1's turn, selection doesn't matter)*
+```init-order``` *(on Ringwraith 1's turn, selection doesn't matter)*
 
 > Initiative Order: 
 >

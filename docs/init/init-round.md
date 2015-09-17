@@ -3,17 +3,17 @@
 
 ## Name
 
-init round - Get or set the current round counter (GM only).
+init-round - Get or set the current round counter (GM only).
 
 ## Synopsis
 
 ```
-init round [<value>]
+init-round [<value>]
 ```
 
 ## Description
 
-Init round gets or sets the round counter that tracks the total elapsed time since the encounter began.
+init-round gets or sets the round counter that tracks the total elapsed time since the encounter began.
 
 To set the round counter to a new value, include its new value in your command (e.g. ```init round 6```).
 
@@ -34,10 +34,10 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init round```
+```init-round```
 
 > The encounter is currently in round 2.
 
-```init round 6```
+```init-round 6```
 
 > The encounter is now in round 6 (round counter forcibly set).

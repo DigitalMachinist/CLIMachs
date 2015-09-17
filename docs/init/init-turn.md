@@ -3,17 +3,17 @@
 
 ## Name
 
-init turn - Get or set the token currently taking its turn (GM only).
+init-turn - Get or set the token currently taking its turn (GM only).
 
 ## Synopsis
 
 ```
-init turn [<token>]
+init-turn [<token>]
 ```
 
 ## Description
 
-Init turn gets or sets the token considered to be currently taking its turn. This does NOT cause the round counter to advance or otherwise change. If you just want to advance the turn order, use [init-next](init-next.md) instead.
+init-turn gets or sets the token considered to be currently taking its turn. This does NOT cause the round counter to advance or otherwise change. If you just want to advance the turn order, use [init-next](init-next.md) instead.
 
 To set the current turn as belonging to a token, include the name of the token in your command (e.g. ```init turn Gandalf```).
 
@@ -34,10 +34,10 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init turn```
+```init-turn```
 
 > It is currently Ringwraith 2's turn.
 
-```init turn Gandalf```
+```init-turn Gandalf```
 
 > Gandalf's turn has begun (turn forcibly set).

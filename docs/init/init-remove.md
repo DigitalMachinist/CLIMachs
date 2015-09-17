@@ -3,17 +3,17 @@
 
 ## Name
 
-init remove - Remove tokens from the initiative order (GM only).
+init-remove - Remove tokens from the initiative order (GM only).
 
 ## Synopsis
 
 ```
-init remove [<tokens>] ...
+init-remove [<tokens>] ...
 ```
 
 ## Description
 
-Init remove removes tokens from the initiative order using the current selection.
+init-remove removes tokens from the initiative order using the current selection.
 
 This allows several tokens to be removed from the initiative order simultaneously and easily.
 
@@ -32,17 +32,17 @@ If an error occurs, the error will whispered to the user who invoked the command
 
 ## Examples
 
-```init remove``` *(with Gandalf selected)*
+```init-remove``` *(with Gandalf selected)*
 
 > Gandalf was removed from the initiative order.
 
-```init remove``` *(with Ringwraith 1 and Ringwraith 2 selected)*
+```init-remove``` *(with Ringwraith 1 and Ringwraith 2 selected)*
 
 > Ringwraith 1 was removed from the initiative order.
 >
 > Ringwraith 2 was removed from the initiative order.
 
-```init remove "Ringwraith 1" "Ringwraith 2"``` *(selection doesn't matter)*
+```init-remove "Ringwraith 1" "Ringwraith 2"``` *(selection doesn't matter)*
 
 > Ringwraith 1 was removed from the initiative order.
 >

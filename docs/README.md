@@ -12,13 +12,27 @@ Cond is a condition tracking system. It allows the GM and their players to keep 
 ### [init Manual](init/init.md)
 Init is a initiative tracking system. It gives the GM and their players the tools to easily manage initiative order, including more complex actions like wait/delay actions. It has a complete chat-message-driven command interface for doing anything a GM and his/her players might want to do with initiative (within reason).
 
+## Dependencies
+
+Init is dependent upon [Manveti](https://app.roll20.net/users/503018/manveti)'s [CommandShell](https://wiki.roll20.net/Script:Command_Shell) to process chat messages into commands and arguments.
+
+## Building CLI Mach's
+
+If you want to modify CLI Mach's and make it your own or something else entirely, you'll have to modify the source code and build the Roll20 distributable script using ```grunt```. You'll need to have [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) (bundled with Node.js) as well as the npm packages [grunt](https://www.npmjs.com/package/grunt) and [grunt-cli](https://www.npmjs.com/package/grunt-cli) installed in order to do this. 
+
+If you have no clue what I'm talking about, check out [this grunt getting started guide](http://gruntjs.com/getting-started) and follow the instructions for "working with an existing Grunt project". It's not as tough as it may seem, but it's outside the scope of this README and it will take you a few hours to get going if you are new to this. You can contact me using either of the links at the bottom if you need some advice on getting started.
+
+If you have everything you need, run this at the terminal (in the repo folder):
+
+```
+grunt
+```
+
 ## Developer's Notes
 
 This collection of Roll20 CLI scripts is (ambitiously) my first attempt at building a script for Roll20. I started with Init, my initiative tracking system, since I wanted to make something that has been done many times already to get started. An initiative tracking tool seemed like it had been done to death, so I figured I'd make one of those so I could peek at how others had done it before me and learn the API.
 
 Init was mostly inspired by [Initiative Tracker](https://wiki.roll20.net/Script:Initiative_Tracker) by [Manveti](https://app.roll20.net/users/503018/manveti) on Roll20.net. 
-
-Init is dependent upon [Manveti](https://app.roll20.net/users/503018/manveti)'s [CommandShell](https://wiki.roll20.net/Script:Command_Shell) to process chat messages into commands with arguments.
 
 ## Future Plans
 
