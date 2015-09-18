@@ -35,7 +35,7 @@
     "maxparams"     : 5,        // {int} Max number of formal params allowed per function
     "maxdepth"      : 5,        // {int} Max depth of nested blocks (within functions)
     "maxstatements" : false,    // {int} Max number statements per function
-    "maxcomplexity" : 5,        // {int} Max cyclomatic complexity per function
+    "maxcomplexity" : 6,        // {int} Max cyclomatic complexity per function
     "maxlen"        : 120,      // {int} Max number of characters per line
     "varstmt"       : true,     // true: Disallow any var statements. Only `let` and `const` are allowed.
 
@@ -92,6 +92,10 @@
 
     // Custom Globals
     "globals": {                // additional predefined global variables
-        "on": false
+        "CLIMachs": false,
+        "findObjs": false, 
+        "log": false,
+        "on": false,
+        "playerIsGM": false
     }
 }
