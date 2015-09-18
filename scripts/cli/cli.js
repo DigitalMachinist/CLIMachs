@@ -119,7 +119,7 @@ CLIMachs.fn.Permissions = function Permissions () {
      * Add a new (or overwrite an existing) permission group.
      * @param  {string} groupName The name of the group to add permissions for.
      */
-    function addPermissionGroup ( groupName ) {
+    function addGroup ( groupName ) {
       
       // Validate for invalid groupNames.
       if ( typeof( groupName ) !== 'string' ) {
@@ -148,7 +148,7 @@ CLIMachs.fn.Permissions = function Permissions () {
      * Add a new (or overwrite an existing) player permission.
      * @param  {string} playerName The name of the player to add permissions for.
      */
-    function addPermissionPlayer ( playerName ) {
+    function addPlayer ( playerName ) {
       
       // Validate for invalid playerNames.
       if ( typeof( playerName ) !== 'string' ) {
@@ -161,9 +161,11 @@ CLIMachs.fn.Permissions = function Permissions () {
         throw new CLIMachs.fn.CommandError( 'No player exists by that name!' ); 
       }
       
-      // Add the player ID to the list of allow players IDs, if it doesn't already exist.
+      // Add the player ID to the list of allowed players IDs, if it doesn't already exist.
       if ( !__players.find( playerId ) ) {
-        __players.push( playerId );
+        __players
+          .push( playerId )
+          .sort();
       }
 
     }
@@ -175,7 +177,7 @@ CLIMachs.fn.Permissions = function Permissions () {
      * @param  {string}  groupName The name of the group to remove permissions for.
      * @return {Boolean}           Whether or not the player was found and removed.
      */
-    function removePermissionGroup ( groupName ) {
+    function removeGroup ( groupName ) {
       
       // Validate for invalid groupNames.
       if ( typeof( groupName ) !== 'string' ) {
@@ -203,7 +205,7 @@ CLIMachs.fn.Permissions = function Permissions () {
      * @param  {string}  playerName The name of the player to remove permissions for.
      * @return {Boolean}            Whether or not the player was found and removed.
      */
-    function removePermissionPlayer ( playerName ) {
+    function removePlayer ( playerName ) {
       
       // Validate for invalid playerNames.
       if ( typeof( playerName ) !== 'string' ) {
@@ -276,24 +278,24 @@ CLIMachs.fn.Permissions = function Permissions () {
 
       // Functions
 
-        addPermissionGroup: {
+        addGroup: {
           enumerable: true,
-          value: addPermissionGroup
+          value: addGroup
         },
 
-        addPermissionPlayer: {
+        addPlayer: {
           enumerable: true,
-          value: addPermissionPlayer
+          value: addPlayer
         },
 
-        removePermissionGroup: {
+        removeGroup: {
           enumerable: true,
-          value: removePermissionGroup
+          value: removeGroup
         },
 
-        removePermissionPlayer: {
+        removePlayer: {
           enumerable: true,
-          value: removePermissionPlayer
+          value: removePlayer
         },
 
         test : {
@@ -400,20 +402,25 @@ CLIMachs.fn.Command = function Command ( signature, description, syntax, callbac
       if ( typeof( alias ) !== 'string' ) {
         throw new CLIMachs.fn.ArgumentError( 'alias must be a valid string!' );
       }
-
-      // TODO
+      
+      // Add the alias to the list, if it doesn't already exist.
+      if ( !__aliases.find( alias ) ) {
+        __aliases
+          .push( alias )
+          .sort();
+      }
 
     }
 
     /**
      * @function
-     * Regsiter a subcommand to extend the behaviour of this command.
+     * Adds a subcommand to extend the behaviour of this command.
      * @param  {Command} command The Command object representing the command to add as a subcommand.
      */
-    function registerSubcommand ( command ) {
+    function addSubcommand ( command ) {
 
       // Validate for invalid commands.
-      if ( !( command instanceof Command ) ) {
+      if ( !( command instanceof CLIMachs.fn.Command ) ) {
         throw new CLIMachs.fn.ArgumentError( 'command must be a valid Command object!' );
       }
 
@@ -449,24 +456,42 @@ CLIMachs.fn.Command = function Command ( signature, description, syntax, callbac
         throw new CLIMachs.fn.ArgumentError( 'alias must be a valid string!' );
       }
 
-      // TODO
+      // Find the alias in the list. If it isn't found, return false.
+      const aliasIndex = __aliases.findIndex( alias );
+      if ( aliasIndex < 0 ) {
+        return false;
+      }
+
+      // Remove the alias from the list and return true for success.
+      __aliases.splice( aliasIndex, 1 );
+      return true;
       
     }
 
     /**
      * @function
-     * Unregister a subcommand from this command by its signature.
+     * Removes a subcommand from this command by its signature (relative to this command).
      * @param  {string}  signature The signature of the command to be removed.
      * @return {Boolean}           Whether or not the command was found and removed.
      */
-    function unregisterSubcommand ( signature ) {
+    function removeSubcommand ( signature ) {
       
       // Validate for invalid signature.
       if ( typeof( signature ) !== 'string' ) {
         throw new CLIMachs.fn.ArgumentError( 'signature must be a valid string!' );
       }
 
-      // TODO
+      // Look up the command by its signature.
+      const command = __subcommands
+        .find( command => command.signature === signature );
+
+      // Reject invalid signatures.
+      if ( !command ) {
+        throw new CLIMachs.fn.CommandError( 'No subcommands match that signature!' );
+      }
+
+      // Try to remove the group and return the result.
+      return __subcommands.removeByKey( signature, false );
 
     }
 
@@ -519,9 +544,9 @@ CLIMachs.fn.Command = function Command ( signature, description, syntax, callbac
           value: addAlias
         },
 
-        registerSubcommand: {
+        addSubcommand: {
           enumerable: true,
-          value: registerSubcommand
+          value: addSubcommand
         },
 
         removeAlias: {
@@ -529,9 +554,9 @@ CLIMachs.fn.Command = function Command ( signature, description, syntax, callbac
           value: removeAlias
         },
 
-        unregisterSubcommand: {
+        removeSubcommand: {
           enumerable: true,
-          value: unregisterSubcommand
+          value: removeSubcommand
         }
 
     } );
@@ -581,38 +606,37 @@ CLIMachs.fn.CLI = function CLI () {
   // Public Functions
 
     /**
-     * Add a command to the CLI lexicon. This will automatically overwrite any command that 
+     * Adds a command to the CLI lexicon. This will automatically overwrite any command that 
      * matches the same signature, but will log a warning if an overwrite takes place.
      * @param  {Command} The Command object representing the command to add as a subcommand.
      */
     function addCommand ( command ) {
 
+      // Validate for invalid commands.
+      if ( !( command instanceof CLIMachs.fn.Command ) ) {
+        throw new CLIMachs.fn.ArgumentError( 'command must be a valid Command object!' );
+      }
+
       // TODO
 
     }
 
-
     /**
-     * Add a permission group to the set of available groups. This will automatically overwrite 
+     * Adds a permission group to the set of available groups. This will automatically overwrite 
      * any group that has the same key, but will log a warning if an overwrite takes place.
-     * @param  {Group} group The Group object to add.
+     * @param  {Group}    groupName The name of the new group to add.
+     * @param  {Function} callback  A callback function to test whether a message belongs to this 
+     *                              group, of the form: ( message ) => {}.
      */
-    function addPermissionGroup ( group ) {
-
-      // TODO
-
-    }
-        
-    /**
-     * Add a middleware callback to run immediately before message routing is processed. If 
-     * beforeIndex is supplied, the middleware will be spliced into the middleware order 
-     * at the given index, pushing all items after it ahead one place.
-     * @param {string}   key         The identifier to use later to remove the callback.
-     * @param {Function} callback    The middleware callback function of the signature:
-     *                               function middleware ( tokens, message ) {}
-     * @param {Number}   beforeIndex The index to insert the middleware at (default: -1).
-     */
-    function addPreCommandMiddleware ( key, callback, atIndex = -1 ) {
+    function addPermissionGroup ( groupName, callback ) {
+      
+      // Validate inputs.
+      if ( typeof( groupName ) !== 'string' ) {
+        throw new CLIMachs.fn.ArgumentError( 'groupName must be a valid string!' );
+      }
+      if ( typeof( callback ) !== 'function' ) {
+        throw new CLIMachs.fn.ArgumentError( 'callback must be a valid function!' );
+      }
 
       // TODO
 
@@ -622,12 +646,55 @@ CLIMachs.fn.CLI = function CLI () {
      * Add a middleware callback to run immediately before the matched command is executed. If 
      * beforeIndex is supplied, the middleware will be spliced into the middleware order 
      * at the given index, pushing all items after it ahead one place.
-     * @param {string}   key         The identifier to use later to remove the callback.
-     * @param {Function} callback    The middleware callback function of the signature:
-     *                               function middleware ( tokens, message, Command ) {}
-     * @param {Number}   beforeIndex The index to insert the middleware at (default: -1).
+     * @param {string}   key      The identifier to use later to remove the callback.
+     * @param {Function} callback The middleware callback function of the signature
+     *                            ( tokens, message, Command ) => {}.
+     * @param {Number}   atIndex  The index to insert the middleware at (default: -1).
      */
-    function addPreRoutingMiddleware ( key, callback, beforeIndex = -1 ) {
+    function addPreCommandMiddleware ( key, callback, atIndex = -1 ) {
+      
+      // Validate inputs.
+      if ( typeof( key ) !== 'string' ) {
+        throw new CLIMachs.fn.ArgumentError( 'key must be a valid string!' );
+      }
+      if ( typeof( callback ) !== 'function' ) {
+        throw new CLIMachs.fn.ArgumentError( 'callback must be a valid function!' );
+      }
+      if ( typeof( atIndex ) !== 'number' ) {
+        throw new CLIMachs.fn.ArgumentError( 'atIndex must be a valid string!' );
+      }
+      if ( atIndex < -1 || atIndex >= __preCommandMiddleware.length ) {
+        throw new CLIMachs.fn.ArgumentError( 'atIndex is out of range!' );
+      }
+
+      // TODO
+
+    }
+        
+    /**
+     * Add a middleware callback to run immediately before message routing is processed. If 
+     * beforeIndex is supplied, the middleware will be spliced into the middleware order 
+     * at the given index, pushing all items after it ahead one place.
+     * @param {string}   key      The identifier to use later to remove the callback.
+     * @param {Function} callback The middleware callback function of the signature
+     *                            ( tokens, message ) => {}.
+     * @param {Number}   atIndex  The index to insert the middleware at (default: -1).
+     */
+    function addPreRoutingMiddleware ( key, callback, atIndex = -1 ) {
+      
+      // Validate inputs.
+      if ( typeof( key ) !== 'string' ) {
+        throw new CLIMachs.fn.ArgumentError( 'key must be a valid string!' );
+      }
+      if ( typeof( callback ) !== 'function' ) {
+        throw new CLIMachs.fn.ArgumentError( 'callback must be a valid function!' );
+      }
+      if ( typeof( atIndex ) !== 'number' ) {
+        throw new CLIMachs.fn.ArgumentError( 'atIndex must be a valid string!' );
+      }
+      if ( atIndex < -1 || atIndex >= __preCommandMiddleware.length ) {
+        throw new CLIMachs.fn.ArgumentError( 'atIndex is out of range!' );
+      }
 
       // TODO
 
@@ -643,23 +710,32 @@ CLIMachs.fn.CLI = function CLI () {
     }
 
     /**
-     * Remove a command from the CLI lexicon by its signature.
+     * Removes a command from the CLI lexicon by its signature.
      * @param  {string}  signature The signature of the command to be removed.
      * @return {Boolean}           Whether or not the Command was found and removed.
      */
     function removeCommand ( signature ) {
+      
+      // Validate for invalid signatures.
+      if ( typeof( signature ) !== 'string' ) {
+        throw new CLIMachs.fn.ArgumentError( 'signature must be a valid string!' );
+      }
 
       // TODO
 
     }
 
-
     /**
-     * Remove a permission group from the set of available groups.
-     * @param  {Group} group The key identifying the group to remove.
-     * @return {Boolean}     Whether or not the Group was found and removed.
+     * Removes a permission group from the set of available groups.
+     * @param  {string}  groupName The key identifying the group to remove.
+     * @return {Boolean}           Whether or not the Group was found and removed.
      */
-    function removePermissionGroup ( group ) {
+    function removePermissionGroup ( groupName ) {
+      
+      // Validate for invalid groupNames.
+      if ( typeof( groupName ) !== 'string' ) {
+        throw new CLIMachs.fn.ArgumentError( 'groupName must be a valid string!' );
+      }
 
       // TODO
 
@@ -667,10 +743,15 @@ CLIMachs.fn.CLI = function CLI () {
         
     /**
      * Remove a middleware that would run before before command execution using its key. 
-     * @param  {string} key The key identifying the middleware to remove.
-     * @return {Boolean}    Whether or not the Middleware was found and removed.
+     * @param  {string}  key The key identifying the middleware to remove.
+     * @return {Boolean}     Whether or not the Middleware was found and removed.
      */
     function removePreCommandMiddleware ( key ) {
+      
+      // Validate for invalid keys.
+      if ( typeof( key ) !== 'string' ) {
+        throw new CLIMachs.fn.ArgumentError( 'key must be a valid string!' );
+      }
 
       // TODO
 
@@ -678,10 +759,15 @@ CLIMachs.fn.CLI = function CLI () {
      
     /**
      * Remove a middleware that would run before before message routing using its key. 
-     * @param  {string} key The key identifying the middleware to remove.
-     * @return {Boolean}    Whether or not the Middleware was found and removed.
+     * @param  {string}  key The key identifying the middleware to remove.
+     * @return {Boolean}     Whether or not the Middleware was found and removed.
      */
     function removePreRoutingMiddleware ( key ) {
+      
+      // Validate for invalid keys.
+      if ( typeof( key ) !== 'string' ) {
+        throw new CLIMachs.fn.ArgumentError( 'key must be a valid string!' );
+      }
 
       // TODO
 
@@ -689,13 +775,26 @@ CLIMachs.fn.CLI = function CLI () {
 
     /**
      * Given a tokenized command message, determine the command intended to be run and execute it.
-     * @param  {Array}   tokens  An array containing a command and any passed arguments.
-     * @param  {Message} message The original Roll20 Message object the tokens were pulled from.
-     * @param  {Array}   head    Used for recursive calling. Stores tokens that have already been 
-     *                           processed so they aren't lost as the tokens array shrinks.
-     * @return {Command}         The matching Command, or null if no commands matched the input.
+     * @param  {Array}   tokens An array containing a command and any passed arguments.
+     * @param  {Array}   head   Used for recursive calling. Stores tokens that have already been 
+     *                          processed so they aren't lost as the tokens array shrinks.
+     * @return {Command}        The matching Command, or null if no commands matched the input.
      */
-    function route ( tokens, message, head = [] ) {
+    function route ( tokens, head = [] ) {
+      
+      // Validate inputs.
+      if ( !( tokens instanceof Array ) ) {
+        throw new CLIMachs.fn.ArgumentError( 'tokens must be a valid Array!' );
+      }
+      if ( tokens.filter( token => typeof( token ) !== 'string' ) > 0 ) {
+        throw new CLIMachs.fn.ArgumentError( 'tokens must contain only strings!' );
+      }
+      if ( !( head instanceof Array ) ) {
+        throw new CLIMachs.fn.ArgumentError( 'head must be a valid Array!' );
+      }
+      if ( head.filter( token => typeof( token ) !== 'string' ) > 0 ) {
+        throw new CLIMachs.fn.ArgumentError( 'head must contain only strings!' );
+      }
 
       // TODO
 
@@ -704,26 +803,27 @@ CLIMachs.fn.CLI = function CLI () {
     /**
      * Given a Roll20 Message object received as chat input, break in into an array containing a 
      * command and any passed arguments.
-     * @param  {Message} message The Roll20 Message object to pull the tokens from.
-     * @return {Array}           A series of string tokens representing the command and any passed 
-     *                           arguments that were contained by the Roll20 Message object.
+     * @param  {string} str The message contents of the Roll20 Message object.
+     * @return {Array}      A series of string tokens representing a command and any passed 
+     *                      arguments that were parsed from the input string.
      */
-    function tokenize ( message ) {
+    function tokenize ( str ) {
+      
+      // Validate for invalid strs.
+      if ( typeof( str ) !== 'string' ) {
+        throw new CLIMachs.fn.ArgumentError( 'str must be a valid string!' );
+      }
 
-      // TODO
-
-    }
-
-  // Private Functions
-
-    /**
-     * @private
-     * Execute each of the middleware callbacks in the provided array, in order.
-     * @param  {Array} middlewareArray An ordered list of middleware to execute.
-     */
-    function __executeMiddleware ( middlewareArray ) {
-
-      // TODO
+      // Tokenize the message by splitting by arguments then stripping starting and ending quotes 
+      // from the matched tokens individually.
+      // The String.match() pattern identifies arguments as (regex): 
+      //    a) Any number of characters not containing spaces, single-quotes or double-quotes.
+      //    b) Any number of characters (lazy) between single-quotes.
+      //    c) Any number of characters (lazy) between double-quotes.
+      return str
+        .match( /([^ '"]+|'.*?'|".*?")/g )
+        .map( token => token.replace( /^['"]/g, '' ) )
+        .map( token => token.replace( /['"]$/g, '' ) );
 
     }
 
