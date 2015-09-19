@@ -6,7 +6,7 @@
  */
 const CLIMachs = CLIMachs || {
 
-  fn: {
+  type: {
 
     /**
      * ArgumentError is a subclass of Error for semantic purposes so denote problems with arguments 
@@ -18,15 +18,91 @@ const CLIMachs = CLIMachs || {
         super( message );
       }
 
+    }
+
+  },
+
+  decorator: {
+
+    describe: ( key ) => ( value ) => {
+
+      return ( target, name, descriptor ) => {
+        descriptor[ key ] = value;
+        return descriptor;
+      };
+
     },
 
+    configurable: describe( 'configurable' ),
+
+    enumerable: describe( 'enumerable' ),
+
+    value: describe( 'value' ),
+
+    writable: describe( 'writable' ),
+
+    private: ( target, name, descriptor ) => {
+      descriptor.configurable = false;
+      descriptor.enumerable = false;
+      descriptor.writable = false;
+      return descriptor;
+    },
+
+    propG: ( target, name, descriptor ) => {
+      descriptor.configurable = false;
+      descriptor.enumerable = true;
+      descriptor.writable = false;
+      return descriptor;
+    },
+
+    public: ( target, name, descriptor ) => {
+      descriptor.configurable = false;
+      descriptor.enumerable = true;
+      descriptor.writable = true;
+      return descriptor;
+    },
+
+    dynamic: ( target, name, descriptor ) => {
+      descriptor.configurable = true;
+      descriptor.enumerable = true;
+      descriptor.writable = true;
+      return descriptor;
+    }
+
+  },
+
+  fn: {
 
     /**
-     * A sorting function to order subcommands alphabetically by signature.
-     * @param  {string}  sortKey       The field on which the sort should operate.
-     * @param  {Boolean} caseSensitive Whether or not this sort should be case sensistive
-     *                                 (default = true).
-     * @return {Function}              A predicate function of the form ( a, b ) => {}.
+     * A sorting function to order objects alphabetically by a given property.
+     * @param  {Boolean}  caseSensitive Whether or not this sort should be case sensistive
+     *                                  (default = true).
+     * @return {Function}               A predicate function of the form ( a, b ) => {}.
+     */
+    currySortAlphabetical: ( caseSensitive = false ) => {
+
+      return ( a, b ) => {
+        var aLower = caseSensitive ? a : a.toLowerCase();
+        var bLower = caseSensitive ? b : b.toLowerCase();
+        if ( aLower < bLower ) {
+          return -1;
+        }
+        else if ( aLower > bLower ) {
+          return 1;
+        }
+        else {
+          return 0; 
+        }
+      };
+
+    },
+
+    /**
+     * A sorting function to order objects alphabetically by a given property.
+     * @param  {string}   sortKey       The property on which the sort should operate.
+     * @param  {Boolean}  caseSensitive Whether or not this sort should be case sensistive
+     *                                  (default = true).
+     * @return {Function}               A predicate function of the form ( a, b ) => {}.
      */
     currySortAlphabeticalByKey: ( sortKey, caseSensitive = false ) => {
 
@@ -45,7 +121,6 @@ const CLIMachs = CLIMachs || {
       };
 
     },
-
 
     /**
      * Try to get the player ID given a name to look up. This function will attempt to find a 
@@ -83,7 +158,6 @@ const CLIMachs = CLIMachs || {
 
     },
 
-
     /**
      * [description]
      * @param  {[type]} textUnescaped [description]
@@ -98,7 +172,6 @@ const CLIMachs = CLIMachs || {
         .replace( /</g,  '&lt;'   )
         .replace( />/g,  '&gt;'   );
     },
-
 
     /**
      * [description]
@@ -133,7 +206,6 @@ Array.prototype.addSortedByKey = ( key, value ) => {
   // Remove the existing key (if any, push the new command onto the array and sort it 
   // alphabetically on the key.
   return this
-    .removeByKey( key, true )
     .push( value )
     .sort( CLIMachs.currySortAlphabeticalByKey( key ) );
 
@@ -143,24 +215,16 @@ Array.prototype.addSortedByKey = ( key, value ) => {
 /**
  * Extension of the Array prototype to include a function for removing object by finding a property 
  * with a particular value and splicing it out.
- * @param  {string}  key        The key at which to remove the value.
- * @param  {Boolean} logRemoval Whether or not removal results in an debug warning being logged
- *                              (default = false);
- * @return {Array}              Returns the modified Array to support chaining of function calls.
+ * @param  {string}  key   The property in which to look to match the value.
+ * @param  {string}  value The value to look for to remove from the array.
+ * @return {Array}         Returns the modified Array to support chaining of function calls.
  */
-Array.prototype.removeByKey = ( key, logRemoval = false ) => {
+Array.prototype.removeByKey = ( key, value ) => {
 
-  // Find the item with the specified key in the array.
-  const keyIndex = this
-    .findIndex( item => item[ key ] === key );
-
-  // Remove the item, if found, and return the new array.
-  if ( keyIndex > -1 ) {
-    if ( logRemoval ) {
-      log( `Warning! Removing ${ key }!` );
-    }
-    return this
-      .splice( keyIndex, 1 );
+  // Try to remove the item with the property key: value from the array.
+  const index = this.findIndex( item => item[ key ] === value );
+  if ( index > -1 ) {
+    return this.splice( index, 1 );
   }
 
   // Return this to support chaining if nothing is removed.
