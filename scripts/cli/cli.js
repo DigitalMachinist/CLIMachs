@@ -962,14 +962,16 @@ CLIMachs.type.CLI =
        */
       evaluate ( message ) {
 
-        if ( !message || message.type !== 'api' ) {
-          throw new CLIMachs.type.ArgumentError( 'message must be a Roll20 API chat message!' );
-        }
-
         let response = null;
         try {
+
+          if ( !message || message.type !== 'api' ) {
+            throw new CLIMachs.type.ArgumentError( 'message must be a Roll20 API chat message!' );
+          }
+
           // Tokenize the message contents and attempt to route/execute the command.
           response = this.route( this.tokenize( message.contents ), message );
+
         }
         catch ( e ) {
           // If an Error is thrown during the above process, handle it here. CommandErrors get 
@@ -1239,13 +1241,7 @@ CLIMachs.type.CLI =
       onChatMessage ( message ) {
 
         // Evaluate the message on the CLI.
-        let response = null;
-        try {
-          response = this.evaulate( message );
-        }
-        catch ( e ) {
-          return;
-        }
+        const response = this.evaulate( message );
 
         // Figure out how to transmit responses based on the contents of the CommandResponse type.
         // TODO
