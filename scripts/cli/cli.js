@@ -266,6 +266,116 @@ CLIMachs.type.CommandPermissions =
 
 /**
  * @class
+ * CommandResponse objects are used to structure chat message responses when commands either 
+ * complete or fail. They contain information such as text, who to send it to, who to send it as, 
+ * and potentially special styling information for HTML-formatted chat messages.
+ */
+CLIMachs.type.CommandResponse = 
+  class {
+
+    // Constructor
+
+      /**
+       * Creates a new CommandResponse.
+       * @param  {Message}         message      The Roll20 chat message that this CommandResponse 
+       *                                        is responding to.
+       * @param  {string}          responseText The text of the response (can contain HTML or 
+       *                                        or markdown as per the Roll20 chat docs).
+       * @param  {string}          recipient    The intended recipient of this message. Valid 
+       *                                        options are: [ 'gm', 'all', 'self' ] or a player's
+       *                                        name to whisper to.
+       * @param  {string}          style        Inline style rules to be used in HTML output.
+       * @param  {string}          speaker      A name for the response text to be spoken as.
+       * @return {CommandResponse}              A CommandResponse instance.
+       */
+      constructor ( message, responseText, recipient, style = '', speaker = 'CLIMachs' ) {
+
+        if ( !message || message.type !== 'api' ) {
+          throw new CLIMachs.type.ArgumentError( 'message must be a valid Roll20 chat message!' );
+        }
+        if ( typeof( recipient ) !== 'string' ) {
+          throw new CLIMachs.type.ArgumentError( 'recipient must be a valid string!' );
+        }
+        if ( typeof( responseText ) !== 'string' ) {
+          throw new CLIMachs.type.ArgumentError( 'responseText must be a valid string!' );
+        }
+        if ( typeof( speaker ) !== 'string' ) {
+          throw new CLIMachs.type.ArgumentError( 'speaker must be a valid string!' );
+        }
+        if ( typeof( style ) !== 'string' ) {
+          throw new CLIMachs.type.ArgumentError( 'style must be a valid string!' );
+        }
+
+        this.message      = message;
+        this.recipient    = recipient;
+        this.responseText = responseText;
+        this.speaker      = speaker;
+        this.style        = style;
+
+      }
+
+    // Fields
+
+      /**
+       * The Roll20 message to which this CommandResponse is responding.
+       * @type {Message}
+       */
+      get message () { return this.message; }
+
+      /**
+       * The intended recipient of this message. Valid options are: [ 'gm', 'all', 'self' ] or a 
+       * player's name to whisper to.
+       * @type {string}
+       */
+      get recipient () { return this.recipient; }
+      set recipient ( value ) { 
+        if ( typeof( recipient ) !== 'string' ) {
+          throw new CLIMachs.type.ArgumentError( 'recipient must be a valid string!' );
+        }
+        this.recipient = value; 
+      }
+
+      /**
+       * The text of the response (can contain HTML or or markdown as per the Roll20 chat docs).
+       * @type {string}
+       */
+      get responseText () { return this.responseText; }
+      set responseText ( value ) { 
+        if ( typeof( responseText ) !== 'string' ) {
+          throw new CLIMachs.type.ArgumentError( 'responseText must be a valid string!' );
+        }
+        this.responseText = value; 
+      }
+
+      /**
+       * A name for the response text to be spoken as.
+       * @type {string}
+       */
+      get speaker () { return this.speaker; }
+      set speaker ( value ) { 
+        if ( typeof( speaker ) !== 'string' ) {
+          throw new CLIMachs.type.ArgumentError( 'speaker must be a valid string!' );
+        }
+        this.speaker = value; 
+      }
+
+      /**
+       * Inline style rules to be used in HTML output.
+       * @type {string}
+       */
+      get style () { return this.style; }
+      set style ( value ) { 
+        if ( typeof( style ) !== 'string' ) {
+          throw new CLIMachs.type.ArgumentError( 'style must be a valid string!' );
+        }
+        this.style = value; 
+      }
+
+  };
+
+
+/**
+ * @class
  * Command objects are used to define all aspects of a command that can be executed by a chat 
  * command through the CLI.
  */
@@ -505,10 +615,11 @@ CLIMachs.type.Command =
        * @function
        * Tests the message's permissions to execute this command, then calls the callback if the 
        * CommandPermissions object grants access.
-       * @param  {Array}    argumentTokens A tokenized array of arguments for the command to 
-       *                                   process.
-       * @param  {Message}  message        The Roll20 API Message object received from chat input.
-       * @return {Response}                The response to send via the chat system.
+       * @param  {Array}           argumentTokens A tokenized array of arguments for the command to 
+       *                                          process.
+       * @param  {Message}         message        The Roll20 API Message object received from chat 
+       *                                          input.
+       * @return {CommandResponse}                The response to send via the chat system.
        */
       execute ( argumentTokens, message ) {
 
@@ -784,7 +895,7 @@ CLIMachs.type.CLI =
        * given index, pushing all items after it ahead one place.
        * @param  {string}   key      The identifier to use later to remove the callback.
        * @param  {Function} callback The middleware callback function of the signature
-       *                             ( Command, Array<tokens>, Response, Message ) => {} : Boolean.
+       *                             ( Command, Array<tokens>, CommandResponse ) => {} : Boolean.
        * @param  {Number}   index    The index to insert the middleware at. Default: -1, 
        *                             interpreted as "add this middleware at the tail of the array".
        * @return {CLI}               Returns itself to support function chaining.
@@ -865,16 +976,12 @@ CLIMachs.type.CLI =
           // special treatment because they denote errors within the expected behaviour of the 
           // commands being processed.
           if ( e instanceof CLIMachs.type.CommandError ) {
-            response = new CLIMachs.type.CommandResponse( 
-              [ message.playerid ], 
-              e.message 
-            ); 
+            response = new CLIMachs.type.CommandResponse( message, e.message, 'self' ); 
           }
           else {
             log( e );
             response = new CLIMachs.type.CommandResponse( 
-              [ message.playerid ], 
-              'An unexpected error occurred! See the script execution log for details.' 
+              message, 'An unexpected error occurred! See the script execution log.', 'self'
             ); 
           }
         }
@@ -1090,7 +1197,7 @@ CLIMachs.type.CLI =
           throw new Error( 'Operation aborted by middleware before response.' );
         }
 
-        // Return the Command's output.
+        // Return the CommandResponse.
         return response;
 
       }

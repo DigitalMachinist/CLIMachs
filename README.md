@@ -3,7 +3,16 @@ A character sheet and accompanying scripts to make for quick turns in Monte Cook
 
 # TODO
 
-## Important
+## CLI
+
+  - grunt-babel build process
+  - CLI markdown documentation
+  - jsDocs
+  - Response object and error handling -- catch anything a command could throw!
+
+## Init
+
+### Important
 
   - init-add
   - init-clear
@@ -12,7 +21,7 @@ A character sheet and accompanying scripts to make for quick turns in Monte Cook
   - init-prev
   - init-start
 
-## Back Burner
+### Back Burner
 
   - cond
   - init-act
