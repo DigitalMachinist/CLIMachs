@@ -20,8 +20,8 @@ const CLIMachs = CLIMachs || {
         // Constructor
 
           /**
-           * Constructor for ConflictError objects. These are used to denote problems with arguments 
-           * passed to functions.
+           * Constructor for ConflictError objects. These are used to denote problems with 
+           * arguments passed to functions.
            * @param  {string}       message A short description of the error.
            * @return {ConflictError}        A ArgumentError instance.
            */
@@ -35,8 +35,8 @@ const CLIMachs = CLIMachs || {
 
     /**
      * @class
-     * Callback objects are used to keep track of middleware and permission group callbacks by giving 
-     * them a key to identify them while stored in an array ordered by execution.
+     * Callback objects are used to keep track of middleware and permission group callbacks by 
+     * giving them a key to identify them while stored in an array ordered by execution.
      */
     Callback: 
       class Callback {
@@ -45,12 +45,14 @@ const CLIMachs = CLIMachs || {
 
           /**
            * @constructor
-           * Constructor for Callback objects. These are used to keep track of middleware callbacks by 
-           * giving them a key to identify them while stored in an array ordered by execution.
+           * Constructor for Callback objects. These are used to keep track of middleware 
+           * callbacks by giving them a key to identify them while stored in an array ordered by 
+           * execution.
            * @param  {string}     key      The identifier given to this middleware callback.
            * @param  {Function}   callback The callback function implementing the behaviour of the 
-           *                               middleware. Function signature may vary by context of usage.
-           * @return {Callback}          A Callback instance.
+           *                               middleware. Function signature may vary by context of 
+           *                               usage.
+           * @return {Callback}            A Callback instance.
            */
           constructor ( key, fn ) {
 
@@ -88,9 +90,9 @@ const CLIMachs = CLIMachs || {
 
     /**
      * @class
-     * ConflictError is a subclass of Error for semantic purposes so denote a collision when attempting 
-     * to map a command to a given signature because of existing subcommand signatures and/or aliases 
-     * that are the same. 
+     * ConflictError is a subclass of Error for semantic purposes so denote a collision when 
+     * attempting to map a command to a given signature because of existing subcommand signatures 
+     * and/or aliases that are the same. 
      * It doesn't do anything new, it's just to distinguish error types.
      */
     ConflictError: 
@@ -100,9 +102,9 @@ const CLIMachs = CLIMachs || {
 
           /**
            * @constructor
-           * Constructor for ConflictError objects. These are used to denote a collision when attempting 
-           * to map a command to a given signature because of existing subcommand signatures and/or 
-           * aliases that are the same.
+           * Constructor for ConflictError objects. These are used to denote a collision when 
+           * attempting to map a command to a given signature because of existing subcommand 
+           * signatures and/or aliases that are the same.
            * @param  {string}       message A short description of the error.
            * @return {ConflictError}        A ConflictError instance.
            */
@@ -116,8 +118,36 @@ const CLIMachs = CLIMachs || {
 
     /**
      * @class
-     * NotFoundError is a subclass of Error for semantic purposes so denote a failure to find an item 
-     * that was expected (often when attempting to delete an item by key). 
+     * ConflictError is a subclass of Error for semantic purposes so denote that an action could 
+     * not be completed because some other resource was expecting something to exist or otherwise 
+     * not change. 
+     * It doesn't do anything new, it's just to distinguish error types.
+     */
+    DependencyError: 
+      class extends Error {
+
+        // Constructor
+
+          /**
+           * @constructor
+           * Constructor for ConflictError objects. These are used to denote that an action could 
+           * not be completed because some other resource was expecting something to exist or 
+           * otherwise not change.
+           * @param  {string}       message A short description of the error.
+           * @return {ConflictError}        A ConflictError instance.
+           */
+          constructor ( message ) {
+
+            super( message );
+
+          }
+
+      },
+
+    /**
+     * @class
+     * NotFoundError is a subclass of Error for semantic purposes so denote a failure to find an 
+     * item that was expected (often when attempting to delete an item by key). 
      * It doesn't do anything new, it's just to distinguish error types.
      */
     NotFoundError: 
@@ -127,8 +157,8 @@ const CLIMachs = CLIMachs || {
 
           /**
            * @constructor
-           * Constructor for NotFoundError objects. These are used to denote a failure to find an item 
-           * that was expected (often when attempting to delete an item by key). 
+           * Constructor for NotFoundError objects. These are used to denote a failure to find an 
+           * item that was expected (often when attempting to delete an item by key). 
            * @param  {string}        message A short description of the error.
            * @return {NotFoundError}         A NotFoundError instance.
            */
@@ -151,16 +181,16 @@ const CLIMachs = CLIMachs || {
 
           /**
            * Creates a new UniqueCollection.
-           * @param  {Function}         sortingFunction A function used to re-sort the data array after 
-           *                                            each time an item is added. Default: null, 
-           *                                            meaning no sorting is applied.
+           * @param  {Function}         sortingFunction A function used to re-sort the data array 
+           *                                            after each time an item is added. Default: 
+           *                                            null, meaning no sorting is applied.
            * @return {UniqueCollection}                 A UniqueCollection instance. 
            */
           constructor ( sortingFunction = null ) {
 
-            // if ( sortingFunction !== null || typeof( sortingFunction ) !== 'function' ) {
-            //   throw new CLIMachs.type.ArgumentError( 'sortingFunction must be a valid function!' );
-            // }
+            if ( sortingFunction !== null || typeof( sortingFunction ) !== 'function' ) {
+              throw new CLIMachs.type.ArgumentError( 'sortingFunction must be a valid function!' );
+            }
 
             this.data = [];
             this.sortingFunction = sortingFunction;
@@ -170,15 +200,17 @@ const CLIMachs = CLIMachs || {
         // Fields
 
           /**
-           * The data array that contains all of the items belonging to the collection. Note: This getter 
-           * returns a shallow copy of the data array, so operating on it will not affect the collection.
+           * The data array that contains all of the items belonging to the collection. Note: This 
+           * getter returns a shallow copy of the data array, so operating on it will not affect 
+           * the collection.
            * @type {Array}
            */
           get data () { return this.data.slice(); }
 
           /**
-           * A sorting function that will be used to automatically re-sort the data array by key any time 
-           * a new item is added to the collection. If set to null, no sorting is applied to the data array.
+           * A sorting function that will be used to automatically re-sort the data array by key 
+           * any time a new item is added to the collection. If set to null, no sorting is applied 
+           * to the data array.
            * @type {Function}
            */
           get sortingFunction () { return this.sortingFunction; }
@@ -197,9 +229,9 @@ const CLIMachs = CLIMachs || {
            * @function
            * Adds a new item to the collection.
            * @param {object} item  The item to add.
-           * @param {Number} index The index at which to add the item. All items currently at or after 
-           *                       this index will be shifted ahead by one place. Default: -1, meaning 
-           *                       to add the item at the end of the array.
+           * @param {Number} index The index at which to add the item. All items currently at or 
+           *                       after this index will be shifted ahead by one place. Default: 
+           *                       -1, meaning to add the item at the end of the array.
            */
           add ( item, index = -1 ) {
 
@@ -263,8 +295,8 @@ const CLIMachs = CLIMachs || {
 
     /**
      * @class
-     * A simple collection designed to maintain the uniqueness of the "key" property of any items it 
-     * contains.
+     * A simple collection designed to maintain the uniqueness of the "key" property of any items 
+     * it contains.
      */
     UniqueKeyedCollection:
       class extends CLIMachs.type.UniqueCollection {
@@ -275,9 +307,10 @@ const CLIMachs = CLIMachs || {
            * Creates a new UniqueKeyedCollection.
            * @param  {string}                keyProp         The name of the property to use as the 
            *                                                 unique key for sorting the collection.
-           * @param  {Function}              sortingFunction A function used to re-sort the data array 
-           *                                                 after each time an item is added. Default: 
-           *                                                 null, meaning no sorting is applied.
+           * @param  {Function}              sortingFunction A function used to re-sort the data 
+           *                                                 array after each time an item is added. 
+           *                                                 Default: null, meaning no sorting is 
+           *                                                 applied.
            * @return {UniqueKeyedCollection}                 A UniqueKeyedCollection instance. 
            */
           constructor ( keyProp, sortingFunction = null ) {
@@ -306,9 +339,9 @@ const CLIMachs = CLIMachs || {
            * @function
            * Adds a new item to the collection.
            * @param {object} item  The item to add.
-           * @param {Number} index The index at which to add the item. All items currently at or after 
-           *                       this index will be shifted ahead by one place. Default: -1, meaning 
-           *                       to add the item at the end of the array.
+           * @param {Number} index The index at which to add the item. All items currently at or 
+           *                       after this index will be shifted ahead by one place. Default: 
+           *                       -1, meaning to add the item at the end of the array.
            */
           add ( item, index = -1 ) {
 
@@ -317,7 +350,8 @@ const CLIMachs = CLIMachs || {
               throw new CLIMachs.type.ArgumentError( 'item must be a valid object!' );
             }
             if ( typeof( item[ this.keyProperty ] ) !== 'undefined' ) {
-              throw new CLIMachs.type.ArgumentError( `item must have a ${ this.keyProp } property!` );
+              throw new CLIMachs.type.ArgumentError( `item must have a ${ this.keyProp }` + 
+                `property!` );
             }
             if ( typeof( index ) !== 'number' ) {
               throw new CLIMachs.type.ArgumentError( 'index must be a valid number!' );
@@ -329,8 +363,8 @@ const CLIMachs = CLIMachs || {
             // Block items with keys already in the data array from being re-added.
             const matches = this.data.filter( x => x[ this.keyProp ] === item[ this.keyProp ] );
             if ( matches.length > 0 ) {
-              throw new CLIMachs.type.ConflictError( `An item already exists with a unique key of` + 
-                `${ item[ this.keyProp ] }.` );
+              throw new CLIMachs.type.ConflictError( `An item already exists with a unique key` + 
+                `of ${ item[ this.keyProp ] }.` );
             }
 
             // Insert the item into the data array at the requested index.
@@ -362,8 +396,8 @@ const CLIMachs = CLIMachs || {
               .filter( x => x[ this.keyProp ] === key );
 
             if ( matches.length === 0 ) {
-              throw new CLIMachs.type.NotFoundError( `No item could be found with a unique key of` + 
-                `${ key }.` );
+              throw new CLIMachs.type.NotFoundError( `No item could be found with a unique key` + 
+                `of ${ key }.` );
             }
 
             // Remove the element from the collection and return it.

@@ -1036,8 +1036,9 @@ CLIMachs.type.CLI =
           .filter( command => command.permissions.groups.find( groupName ) );
 
         if ( dependentCommands.length > 0 ) {
-          throw new Error( `The ${ groupName } permission group cannot not be removed because ` +
-            `one or more commands depend upon it. Commands: ${ dependentCommands }` );
+          throw new CLIMachs.type.DependencyError( `The ${ groupName } permission group cannot` + 
+            `not be removed because one or more commands depend upon it. Commands:` +
+            `${ dependentCommands }` );
         }
 
         // Try to remove the permission group from the list.
@@ -1173,7 +1174,7 @@ CLIMachs.type.CLI =
         const continueToRouting = this.preRoutingMiddleware
           .forEach( x => x.callback( tokens, message ) )
           .map( x => x.callback( tokens, message ) )
-          .reduce( ( acc, result ) => acc = acc && result, true );
+          .reduce( ( acc, result ) => !acc ? false : ( acc && result ), true );
         if ( !continueToRouting ) {
           throw new Error( 'Operation aborted by middleware before message routing.' );
         }
@@ -1189,7 +1190,7 @@ CLIMachs.type.CLI =
         // Run each of the pre-command middleware callbacks.
         const continueToCommand = this.preCommandMiddleware
           .map( x => x.callback( command, tokens, message ) )
-          .reduce( ( acc, result ) => acc = acc && result, true );
+          .reduce( ( acc, result ) => !acc ? false : ( acc && result ), true );
         if ( !continueToCommand ) {
           throw new Error( 'Operation aborted by middleware before command execution.' );
         }
@@ -1200,7 +1201,7 @@ CLIMachs.type.CLI =
         // Run each of the pre-response middleware callbacks.
         const continueToResponse = this.preResponseMiddleware
           .map( x => x.callback( response, message ) )
-          .reduce( ( acc, result ) => acc = acc && result, true );
+          .reduce( ( acc, result ) => !acc ? false : ( acc && result ), true );
         if ( !continueToResponse ) {
           throw new Error( 'Operation aborted by middleware before response.' );
         }
