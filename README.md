@@ -1,5 +1,6 @@
-# roll20-cypher-system
-A character sheet and accompanying scripts to make for quick turns in Monte Cook's Cypher System on Roll20.
+# CLIMachs Command Framework
+
+A complete CLI command framework for the Roll20.net scripting API.
 
 # TODO
 
