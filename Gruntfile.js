@@ -8,13 +8,11 @@ module.exports = function ( grunt ) {
 
     babel: {
       options: {
-        comments: false,
-        sourceMap: false,
         stage: 1
       },
       dist: {
         files: {
-          '<%= concat.dist.dest %>': '<%= concat.dist.dest %>'
+          'temp/<%= pkg.name %>.babel.js': 'temp/<%= pkg.name %>.esnext.js'
         }
       }
     },
@@ -35,7 +33,7 @@ module.exports = function ( grunt ) {
           'scripts/cli/cli.js'
         ],
         // The location of the resulting JS file.
-        dest: 'temp/<%= pkg.name %>.js'
+        dest: 'temp/<%= pkg.name %>.esnext.js'
       }
     },
 
@@ -55,7 +53,7 @@ module.exports = function ( grunt ) {
           preserveComments: 'some'
         },
         files: {
-          '<%= pkg.name %>.js': [ '<%= concat.dist.dest %>' ]
+          '<%= pkg.name %>.js': [ 'temp/<%= pkg.name %>.babel.js' ]
         }
       },
 
@@ -77,6 +75,6 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks( 'grunt-contrib-concat' );
   grunt.loadNpmTasks( 'grunt-contrib-uglify' );
 
-  grunt.registerTask( 'default', [ 'concat', 'babel', 'uglify:beautify', 'uglify:minify', 'clean' ] );
+  grunt.registerTask( 'default', [ 'concat', 'babel', 'uglify:beautify', 'uglify:minify' ] );
 
 };
