@@ -1,3 +1,6 @@
 
+node_modules
+temp
+
 # Sublime project files
 *.sublime-*

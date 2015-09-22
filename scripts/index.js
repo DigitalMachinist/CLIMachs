@@ -118,7 +118,7 @@ const CLIMachs = CLIMachs || {
 
     /**
      * @class
-     * ConflictError is a subclass of Error for semantic purposes so denote that an action could 
+     * DependencyError is a subclass of Error for semantic purposes so denote that an action could 
      * not be completed because some other resource was expecting something to exist or otherwise 
      * not change. 
      * It doesn't do anything new, it's just to distinguish error types.
@@ -319,9 +319,9 @@ const CLIMachs = CLIMachs || {
               throw new CLIMachs.type.ArgumentError( 'keyProperty must be a valid string!' );
             }
 
-            this.keyProp = keyProp;
-
             super( sortingFunction );
+
+            this.keyProp = keyProp;
 
           }
 
