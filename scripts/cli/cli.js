@@ -277,18 +277,20 @@ CLIMachs.type.CommandResponse =
 
       /**
        * Creates a new CommandResponse.
-       * @param  {Message}         message      The Roll20 chat message that this CommandResponse 
-       *                                        is responding to.
-       * @param  {string}          responseText The text of the response (can contain HTML or 
-       *                                        or markdown as per the Roll20 chat docs).
-       * @param  {string}          recipient    The intended recipient of this message. Valid 
-       *                                        options are: [ 'gm', 'all', 'self' ] or a player's
-       *                                        name to whisper to.
-       * @param  {string}          style        Inline style rules to be used in HTML output.
-       * @param  {string}          speaker      A name for the response text to be spoken as.
-       * @return {CommandResponse}              A CommandResponse instance.
+       * @param  {Message}         message   The Roll20 chat message that this CommandResponse 
+       *                                     is responding to.
+       * @param  {string|Array}    text      The text of the response (can contain HTML or 
+       *                                     or markdown as per the Roll20 chat docs). If an 
+       *                                     array is passed, each string in the array is a 
+       *                                     line of text, separated by line breaks.
+       * @param  {string}          recipient The intended recipient(s) of this message. Valid 
+       *                                     options are: [ 'gm', 'all', 'self' ] or a player's
+       *                                     name to whisper to.
+       * @param  {string}          style     Inline style rules to be used in HTML output.
+       * @param  {string}          speaker   A name for the response text to be spoken as.
+       * @return {CommandResponse}           A CommandResponse instance.
        */
-      constructor ( message, responseText, recipient, style = '', speaker = 'CLIMachs' ) {
+      constructor ( message, text, recipient, style = '', speaker = 'CLIMachs' ) {
 
         if ( !message || message.type !== 'api' ) {
           throw new CLIMachs.type.ArgumentError( 'message must be a valid Roll20 chat message!' );
@@ -296,21 +298,21 @@ CLIMachs.type.CommandResponse =
         if ( typeof( recipient ) !== 'string' ) {
           throw new CLIMachs.type.ArgumentError( 'recipient must be a valid string!' );
         }
-        if ( typeof( responseText ) !== 'string' ) {
-          throw new CLIMachs.type.ArgumentError( 'responseText must be a valid string!' );
-        }
         if ( typeof( speaker ) !== 'string' ) {
           throw new CLIMachs.type.ArgumentError( 'speaker must be a valid string!' );
         }
         if ( typeof( style ) !== 'string' ) {
           throw new CLIMachs.type.ArgumentError( 'style must be a valid string!' );
         }
+        if ( typeof( text ) !== 'string' && !( text instanceof Array ) ) {
+          throw new CLIMachs.type.ArgumentError( 'text must be a valid string or Array!' );
+        }
 
-        this.message      = message;
-        this.recipient    = recipient;
-        this.responseText = responseText;
-        this.speaker      = speaker;
-        this.style        = style;
+        this.message   = message;
+        this.recipient = recipient;
+        this.speaker   = speaker;
+        this.style     = style;
+        this.text      = text;
 
       }
 
@@ -336,25 +338,13 @@ CLIMachs.type.CommandResponse =
       }
 
       /**
-       * The text of the response (can contain HTML or or markdown as per the Roll20 chat docs).
-       * @type {string}
-       */
-      get responseText () { return this.responseText; }
-      set responseText ( value ) { 
-        if ( typeof( responseText ) !== 'string' ) {
-          throw new CLIMachs.type.ArgumentError( 'responseText must be a valid string!' );
-        }
-        this.responseText = value; 
-      }
-
-      /**
        * A name for the response text to be spoken as.
        * @type {string}
        */
       get speaker () { return this.speaker; }
       set speaker ( value ) { 
         if ( typeof( speaker ) !== 'string' ) {
-          throw new CLIMachs.type.ArgumentError( 'speaker must be a valid string!' );
+          throw new CLIMachs.type.ArgumentError( 'speaker must be a valid string or Array!' );
         }
         this.speaker = value; 
       }
@@ -369,6 +359,18 @@ CLIMachs.type.CommandResponse =
           throw new CLIMachs.type.ArgumentError( 'style must be a valid string!' );
         }
         this.style = value; 
+      }
+
+      /**
+       * The text of the response (can contain HTML or or markdown as per the Roll20 chat docs).
+       * @type {string|Array}
+       */
+      get text () { return this.text; }
+      set text ( value ) { 
+        if ( typeof( value ) !== 'string' && !( value instanceof Array ) ) {
+          throw new CLIMachs.type.ArgumentError( 'text must be a valid string or Array!' );
+        }
+        this.text = value; 
       }
 
   };
@@ -709,9 +711,9 @@ CLIMachs.type.CLI =
         this.permissionGroups = new CLIMachs.type.UniqueKeyCollection(
           'key', CLIMachs.fn.currySortAlphabeticalByKey( 'key' )
         );
-        this.preCommandMiddleware  = new CLIMachs.type.UniqueKeyCollection( 'key' );
-        this.preResponseMiddleware = new CLIMachs.type.UniqueKeyCollection( 'key' );
-        this.preRoutingMiddleware  = new CLIMachs.type.UniqueKeyCollection( 'key' );
+        this.preCommandMiddleware  = new CLIMachs.type.UniqueKeyCollection( 'key', null );
+        this.preResponseMiddleware = new CLIMachs.type.UniqueKeyCollection( 'key', null );
+        this.preRoutingMiddleware  = new CLIMachs.type.UniqueKeyCollection( 'key', null );
 
       }
 
@@ -956,9 +958,11 @@ CLIMachs.type.CLI =
       /**
        * @function
        * Evaluate the given message by tokenizing the message, 
-       * @param  {Message}  message The Roll20 API Message object received from chat input.
-       * @return {Response}         A Response object containing a message, recipients, a name to  
-       *                            send the message as, and potentially special styling data.
+       * @param  {Message}               message The Roll20 API Message object received from chat 
+       *                                         input.
+       * @return {CommandResponse|Array}         A Response object containing a message, recipients, 
+       *                                         a name to send the message as, and potentially 
+       *                                         special styling data, or an array of them.
        */
       evaluate ( message ) {
 
@@ -978,7 +982,9 @@ CLIMachs.type.CLI =
           // special treatment because they denote errors within the expected behaviour of the 
           // commands being processed.
           if ( e instanceof CLIMachs.type.CommandError ) {
-            response = new CLIMachs.type.CommandResponse( message, e.message, 'self' ); 
+            response = new CLIMachs.type.CommandResponse( 
+              message, e.message, 'self' 
+            ); 
           }
           else {
             log( e );
@@ -1206,6 +1212,38 @@ CLIMachs.type.CLI =
 
       /**
        * @function
+       * Send the text contents of a CommandResponse over Roll20 chat.
+       * @param  {CommandResponse} response The CommandResponse to send over chat.
+       */
+      sendResponse ( response ) {
+
+        // Recipients
+        let recipients = '';
+        switch ( response.recipient ) {
+          case 'all':  /* No need to whisper to everyone! */        break;                               
+          case 'gm':   recipients = '/w gm';                        break;
+          case 'self': recipients = `/w ${ response.message.who }`; break;
+          default:     recipients = `/w ${ response.recipient }`;   break;
+        }
+
+        // Style
+        const style = `padding: 0; margin: 0; white-space: pre-wrap; ${ response.style }`;
+
+        // Text
+        const text = []
+          .concat( response.text )
+          .map( paragraph => `<p>${ paragraph }</p>` );
+
+        // Send chat message.
+        sendChat( 
+          `${ recipients } <div style="${ style }>${ text }</div>"`, 
+          response.speaker 
+        );
+
+      }
+
+      /**
+       * @function
        * Given the text message contents of a Roll20 Message object received from chat input, break 
        * in into an array containing a command and any passed arguments.
        * @param  {string} messageContents The message contents of the Roll20 Message object.
@@ -1236,15 +1274,51 @@ CLIMachs.type.CLI =
 
       /**
        * @function
-       * Handle chat messages and process them.
+       * Handle chat messages by evaluating them and sending out the response(s).
        */
       onChatMessage ( message ) {
 
         // Evaluate the message on the CLI.
         const response = this.evaulate( message );
 
-        // Figure out how to transmit responses based on the contents of the CommandResponse type.
-        // TODO
+        let failMessage;
+        if ( response instanceof CLIMachs.type.CommandResponse ) {
+
+          // Try to send out each of the responses.
+          try { 
+            this.sendResponse( response ); 
+          }
+          catch ( e ) { 
+            failMessage = `A response could not be sent to chat: ${ response }`; 
+          }
+
+        }
+        else if ( response instanceof Array ) {
+
+          // Try to send out each of the responses.
+          response.forEach( x => {
+            try { 
+              this.sendResponse( x ); 
+            }
+            catch ( e ) { 
+              failMessage = `A response could not be sent to chat: ${ x }`; 
+            }
+          } );
+
+        }
+        else {
+
+          // Log out the badly formatted message.
+          failMessage = `A command must return a CommandResponse or an Array of ` + 
+            `CommandResponses! Response: ${ response }`;
+
+        }
+
+        // If failMessage was set, send it out and log it.
+        if ( failMessage ) {
+          log( failMessage );
+          sendChat(  );
+        }
 
       }
 

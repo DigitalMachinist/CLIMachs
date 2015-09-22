@@ -91,11 +91,12 @@
     "yui"           : false,    // Yahoo User Interface
 
     // Custom Globals
-    "globals": {                // additional predefined global variables
-        "CLIMachs": false,
-        "findObjs": false, 
-        "log": false,
-        "on": false,
-        "playerIsGM": false
+    "globals": {                // Additional predefined global variables
+        "CLIMachs"  : false,
+        "findObjs"  : false, 
+        "log"       : false,
+        "on"        : false,
+        "playerIsGM": false,
+        "sendChat"  : false
     }
 }
