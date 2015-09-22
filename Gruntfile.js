@@ -29,8 +29,13 @@ module.exports = function ( grunt ) {
       dist: {
         // The files to concatenate
         src: [ 
-          'scripts/index.js', 
-          'scripts/cli/cli.js'
+          'src/index.js', 
+          'src/cli.js',
+          'src/conf.js',
+          'src/perm.js',
+          //'src/init.js',
+          //'src/cond.js',
+          //'src/stat.js'
         ],
         // The location of the resulting JS file.
         dest: 'temp/<%= pkg.name %>.esnext.js'
