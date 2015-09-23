@@ -46,7 +46,7 @@ module.exports = function ( grunt ) {
       dist: {
         src: [ 'temp/CLIMachs.babel.js', 'package.json', 'README.md' ],
         options: {
-          destination: 'jsdoc',
+          destination: 'docs/api',
           template : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
           configure : 'jsdoc.conf.json'
         }
