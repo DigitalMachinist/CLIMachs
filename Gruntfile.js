@@ -42,6 +42,17 @@ module.exports = function ( grunt ) {
       }
     },
 
+    jsdoc: {
+      dist: {
+        src: [ 'temp/CLIMachs.babel.js', 'package.json', 'README.md' ],
+        options: {
+          destination: 'jsdoc',
+          template : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
+          configure : 'jsdoc.conf.json'
+        }
+      }
+    },
+
     uglify: {
 
       beautify: {
@@ -79,6 +90,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks( 'grunt-contrib-clean' );
   grunt.loadNpmTasks( 'grunt-contrib-concat' );
   grunt.loadNpmTasks( 'grunt-contrib-uglify' );
+  grunt.loadNpmTasks( 'grunt-jsdoc' );
 
   grunt.registerTask( 'default', [ 'concat', 'babel', 'uglify:beautify', 'uglify:minify' ] );
 
