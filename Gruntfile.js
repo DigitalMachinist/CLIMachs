@@ -44,11 +44,20 @@ module.exports = function ( grunt ) {
 
     jsdoc: {
       dist: {
-        src: [ 'temp/CLIMachs.babel.js', 'package.json', 'README.md' ],
+        src: [ 'src/**/*.js', 'package.json', 'README.md' ],
         options: {
           destination: 'docs/api',
           template : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
           configure : 'jsdoc.conf.json'
+        }
+      }
+    },
+
+    jasmine: {
+      dist: {
+        src: [ 'CLIMachs.js' ],
+        options: {
+          specs: [ 'spec/**/*.js' ]
         }
       }
     },
@@ -89,9 +98,10 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks( 'grunt-babel' );
   grunt.loadNpmTasks( 'grunt-contrib-clean' );
   grunt.loadNpmTasks( 'grunt-contrib-concat' );
+  grunt.loadNpmTasks( 'grunt-contrib-jasmine' );
   grunt.loadNpmTasks( 'grunt-contrib-uglify' );
   grunt.loadNpmTasks( 'grunt-jsdoc' );
 
-  grunt.registerTask( 'default', [ 'concat', 'babel', 'uglify:beautify', 'uglify:minify' ] );
-
+  grunt.registerTask( 'default', [ 'concat', 'babel', 'uglify:beautify', 'uglify:minify' ] );//, 'jasmine' ] );
+  grunt.registerTask( 'test', [ 'jasmine' ] );
 };

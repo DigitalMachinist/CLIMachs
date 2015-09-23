@@ -1,7 +1,9 @@
 
+.grunt
 docs/api
 node_modules
 temp
+_SpecRunner.html
 
 # Sublime project files
 *.sublime-*
