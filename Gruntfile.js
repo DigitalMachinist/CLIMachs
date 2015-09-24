@@ -2,6 +2,23 @@
 
 module.exports = function ( grunt ) {
 
+  // =============
+  // Configuration
+  // =============
+
+  // Adjust what commands are included by commenting out lines in this array.
+  var includedCommands = [
+    'conf.js',    // The 'conf' command (recommended)
+    'perm.js',    // The 'perm' command (recommended)
+    //'cond.js',  // The 'cond' command (optional)
+    //'init.js',  // The 'init' command (optional)
+    //'stat.js',  // The 'stat' command (optional)
+  ];
+
+  // =========================================================================================
+  // My advice is to stay away from everything below unless you really know what you're doing.
+  // =========================================================================================
+  
   grunt.initConfig( {
 
     pkg: grunt.file.readJSON( 'package.json' ), 
@@ -17,7 +34,7 @@ module.exports = function ( grunt ) {
       },
       jasmine: {
         files: {
-          'cache/mocks.babel.js': 'spec/mocks.js', 
+          'cache/mocks.babel.js': 'tests/mocks/roll20.js', 
           'cache/specs.babel.js': 'cache/specs.esnext.js'
         }
       }
@@ -29,32 +46,25 @@ module.exports = function ( grunt ) {
 
     concat: {
       options: {
-        // Define a string to put between each file in the concatenated output.
         separator: ';'
       },
       dist: {
-        src: [ 
-          'src/core.js',
-          'src/cli.js',
-          'src/conf.js',
-          'src/perm.js',
-          //'src/init.js',
-          //'src/cond.js',
-          //'src/stat.js',
-          'src/index.js'
-        ],
+        src: [ 'core.js', 'cli.js' ]
+          .concat( includedCommands )
+          .concat( 'index.js' )
+          .map( function ( file ) { return 'src/' + file; } ),
         dest: 'cache/<%= pkg.name %>.esnext.js'
       },
       jasmine: {
         src: [ 
-          'spec/core.spec.js',
-          'spec/cli.spec.js',
-          //'spec/conf.spec.js',
-          //'spec/perm.spec.js',
-          //'spec/init.spec.js',
-          //'spec/cond.spec.js',
-          //'spec/stat.spec.js',
-          //'spec/index.spec.js'
+          'tests/specs/core.spec.js',
+          'tests/specs/cli.spec.js',
+          //'tests/specs/conf.spec.js',
+          //'tests/specs/perm.spec.js',
+          //'tests/specs/init.spec.js',
+          //'tests/specs/cond.spec.js',
+          //'tests/specs/stat.spec.js',
+          //'tests/specs/index.spec.js'
         ],
         dest: 'cache/specs.esnext.js'
       }
@@ -62,22 +72,22 @@ module.exports = function ( grunt ) {
 
     jsdoc: {
       dist: {
-        src: [ 'src/**/*.js', 'package.json', 'docs/api/README.md' ],
         options: {
           destination: 'docs/api',
-          cachelate : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/cachelate',
+          template : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
           configure : 'jsdoc.conf.json'
-        }
+        },
+        src: [ 'src/**/*.js', 'package.json', 'docs/api/README.md' ]
       }
     },
 
     jasmine: {
       dist: {
-        src: [ 'CLIMachs.js' ],
         options: {
           specs: [ 'cache/specs.babel.js' ],
-          vendor: 'cache/mocks.babel.js'
-        }
+          vendor: [ 'cache/mocks.babel.js' ]
+        },
+        src: [ 'CLIMachs.js' ]
       }
     },
 
@@ -85,14 +95,13 @@ module.exports = function ( grunt ) {
 
       beautify: {
         options: {
-          // The banner is inserted at the top of the output.
-          banner: '/*! <%= grunt.template.today( "yyyy-mm-dd" ) %> ' + 
-            '-- CLIMachs Roll20 Command Framework (v<%= pkg.version %>) ' + 
-            '-- See <%= pkg.repository.url %> for the full source code. */\n',
           beautify: {
             beautify: true,
             width: 100
           },
+          banner: '/*! <%= grunt.template.today( "yyyy-mm-dd" ) %> ' + 
+            '-- CLIMachs Roll20 Command Framework (v<%= pkg.version %>) ' + 
+            '-- See <%= pkg.repository.url %> for the full source code. */\n',
           mangle: true,
           preserveComments: 'some'
         },
@@ -106,7 +115,7 @@ module.exports = function ( grunt ) {
           preserveComments: 'some'
         },
         files: {
-          'roll20/<%= pkg.name %>.min.js': [ '<%= pkg.name %>.js' ]
+          'roll20/<%= pkg.name %>.min.js': [ 'roll20/<%= pkg.name %>.js' ]
         }
       }
 

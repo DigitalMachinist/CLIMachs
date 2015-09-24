@@ -1,4 +1,4 @@
-/*! 2015-09-23 -- CLIMachs Roll20 Command Framework (v0.0.1) -- See https://github.com/DigitalMachinist/CLIMachs.git for the full source code. */
+/*! 2015-09-24 -- CLIMachs Roll20 Command Framework (v0.0.1) -- See https://github.com/DigitalMachinist/CLIMachs.git for the full source code. */
 "use strict";
 
 function _inherits(a, b) {
