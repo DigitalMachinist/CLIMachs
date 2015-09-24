@@ -174,6 +174,7 @@ CLIMachs.collections.Callback = function() {
     };
 }, CLIMachs.fn.currySortAlphabeticalByKey = function(a) {
     var b = arguments.length <= 1 || void 0 === arguments[1] ? !1 : arguments[1];
+    if ("string" != typeof a) throw new CLIMachs.errors.ArgumentError("sortKey must be a valid string!");
     return function(c, d) {
         var e = b ? c[a] : c[a].toLowerCase(), f = b ? d[a] : d[a].toLowerCase();
         return f > e ? -1 : e > f ? 1 : 0;
@@ -198,9 +199,8 @@ CLIMachs.collections.Callback = function() {
     }
     return -1;
 }, CLIMachs.fn.htmlEscape = function(a) {
-    return String(a).replace(/\n/g, "<br />").replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}, CLIMachs.fn.htmlUnescape = function(a) {
-    return String(a).replace(/<br \/>/g, "\n").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+    if ("string" != typeof a) throw new CLIMachs.errors.ArgumentError("text must be a valid string!");
+    return a.replace(/\n/g, "<br />").replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }, CLIMachs.errors.CommandError = function(a) {
     function b(a) {
         _classCallCheck(this, b), _get(Object.getPrototypeOf(b.prototype), "constructor", this).call(this, a);

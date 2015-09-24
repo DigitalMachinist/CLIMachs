@@ -5,11 +5,7 @@ describe( 'CLIMachs CLI Namespaces', () => {
 
     describe( 'CommandError', () => {
 
-      it( 'contains spec with an expectation', () => {
-        expect( true ).toBe( true );
-      } );
-
-
+      // No logic to test.
 
     } );
 

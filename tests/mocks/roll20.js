@@ -11,16 +11,16 @@ var events = {};
 
 function findObjs ( attrs, options ) {
 
-  if ( attrs.type === 'player' && attrs.displayname === 'test' ) {
+  if ( attrs.type === 'player' && attrs.displayname === 'player' ) {
     return [
       { get: ( prop ) => 1 },
       { get: ( prop ) => 2 }
     ];
   }
-  else if ( attrs.type === 'character' && attrs.name === 'test' ) {
+  else if ( attrs.type === 'character' && attrs.name === 'character' ) {
     return [
-      { get: ( prop ) => [ 1, 2 ] },
-      { get: ( prop ) => [ 3, 4 ] }
+      { get: ( prop ) => [ 3, 4 ] },
+      { get: ( prop ) => [ 5, 6 ] }
     ];
   }
 

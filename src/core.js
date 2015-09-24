@@ -503,6 +503,10 @@ const CLIMachs = {
   CLIMachs.fn.currySortAlphabeticalByKey = 
     function currySortAlphabeticalByKey ( sortKey, caseSensitive = false ) {
 
+      if ( typeof( sortKey ) !== 'string' ) {
+        throw new CLIMachs.errors.ArgumentError( 'sortKey must be a valid string!' );
+      }
+
       return ( a, b ) => {
         var aLower = caseSensitive ? a[ sortKey ] : a[ sortKey ].toLowerCase();
         var bLower = caseSensitive ? b[ sortKey ] : b[ sortKey ].toLowerCase();
@@ -579,35 +583,18 @@ const CLIMachs = {
    * HTML-safe text.
    */ 
   CLIMachs.fn.htmlEscape = 
-    function htmlEscape ( textUnescaped ) {
-      return String( textUnescaped )
+    function htmlEscape ( text ) {
+
+      if ( typeof( text ) !== 'string' ) {
+        throw new CLIMachs.errors.ArgumentError( 'text must be a valid string!' );
+      }
+
+      return text
         .replace( /\n/g, '<br />' )
         .replace( /"/g,  '&quot;' )
         .replace( /'/g,  '&#39;'  )
         .replace( /&/g,  '&amp;'  )
         .replace( /</g,  '&lt;'   )
         .replace( />/g,  '&gt;'   );
-    };
 
-  /**
-   * @function CLIMachs.fn.htmlUnescape
-   * @memberof CLIMachs.fn
-   * 
-   * @description Transform HTML-safe text into unescaped text.
-   * 
-   * @param {string} textEscaped 
-   * HTML-safe text.
-   * 
-   * @return {string}
-   * Unescaped text.
-   */ 
-  CLIMachs.fn.htmlUnescape = 
-    function htmlUnescape ( textEscaped ) {
-      return String( textEscaped )
-        .replace( /<br \/>/g, '\n' )
-        .replace( /&quot;/g,  '"'  )
-        .replace( /&#39;/g,   '\'' )
-        .replace( /&amp;/g,   '&'  )
-        .replace( /&lt;/g,    '<'  )
-        .replace( /&gt;/g,    '>'  );
     };
