@@ -12,13 +12,19 @@ module.exports = function ( grunt ) {
       },
       dist: {
         files: {
-          'temp/<%= pkg.name %>.babel.js': 'temp/<%= pkg.name %>.esnext.js'
+          'cache/<%= pkg.name %>.babel.js': 'cache/<%= pkg.name %>.esnext.js'
+        }
+      },
+      jasmine: {
+        files: {
+          'cache/mocks.babel.js': 'spec/mocks.js', 
+          'cache/specs.babel.js': 'cache/specs.esnext.js'
         }
       }
     },
 
     clean: {
-      temp: [ 'temp' ]
+      cache: [ 'cache' ]
     },
 
     concat: {
@@ -27,27 +33,39 @@ module.exports = function ( grunt ) {
         separator: ';'
       },
       dist: {
-        // The files to concatenate
         src: [ 
-          'src/index.js', 
+          'src/core.js',
           'src/cli.js',
           'src/conf.js',
           'src/perm.js',
           //'src/init.js',
           //'src/cond.js',
-          //'src/stat.js'
+          //'src/stat.js',
+          'src/index.js'
         ],
-        // The location of the resulting JS file.
-        dest: 'temp/<%= pkg.name %>.esnext.js'
+        dest: 'cache/<%= pkg.name %>.esnext.js'
+      },
+      jasmine: {
+        src: [ 
+          'spec/core.spec.js',
+          'spec/cli.spec.js',
+          //'spec/conf.spec.js',
+          //'spec/perm.spec.js',
+          //'spec/init.spec.js',
+          //'spec/cond.spec.js',
+          //'spec/stat.spec.js',
+          //'spec/index.spec.js'
+        ],
+        dest: 'cache/specs.esnext.js'
       }
     },
 
     jsdoc: {
       dist: {
-        src: [ 'src/**/*.js', 'package.json', 'README.md' ],
+        src: [ 'src/**/*.js', 'package.json', 'docs/api/README.md' ],
         options: {
           destination: 'docs/api',
-          template : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
+          cachelate : 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/cachelate',
           configure : 'jsdoc.conf.json'
         }
       }
@@ -57,7 +75,8 @@ module.exports = function ( grunt ) {
       dist: {
         src: [ 'CLIMachs.js' ],
         options: {
-          specs: [ 'spec/**/*.js' ]
+          specs: [ 'cache/specs.babel.js' ],
+          vendor: 'cache/mocks.babel.js'
         }
       }
     },
@@ -78,7 +97,7 @@ module.exports = function ( grunt ) {
           preserveComments: 'some'
         },
         files: {
-          '<%= pkg.name %>.js': [ 'temp/<%= pkg.name %>.babel.js' ]
+          'roll20/<%= pkg.name %>.js': [ 'cache/<%= pkg.name %>.babel.js' ]
         }
       },
 
@@ -87,7 +106,7 @@ module.exports = function ( grunt ) {
           preserveComments: 'some'
         },
         files: {
-          '<%= pkg.name %>.min.js': [ '<%= pkg.name %>.js' ]
+          'roll20/<%= pkg.name %>.min.js': [ '<%= pkg.name %>.js' ]
         }
       }
 
@@ -102,6 +121,6 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks( 'grunt-contrib-uglify' );
   grunt.loadNpmTasks( 'grunt-jsdoc' );
 
-  grunt.registerTask( 'default', [ 'concat', 'babel', 'uglify:beautify', 'uglify:minify' ] );//, 'jasmine' ] );
-  grunt.registerTask( 'test', [ 'jasmine' ] );
+  grunt.registerTask( 'default', [ 'concat:dist', 'babel:dist', 'uglify:beautify', 'uglify:minify', 'test' ] );
+  grunt.registerTask( 'test', [ 'concat:jasmine', 'babel:jasmine', 'jasmine' ] );
 };

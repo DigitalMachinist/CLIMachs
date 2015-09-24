@@ -1,8 +1,8 @@
 
 .grunt
-docs/api
+cache
+docs/api/CLIMachs
 node_modules
-temp
 _SpecRunner.html
 
 # Sublime project files

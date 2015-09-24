@@ -55,11 +55,11 @@
             throw new CLIMachs.errors.ArgumentError( 'command must be a valid Command object!' );
           }
 
-          this.command = command;
-          this.groups  = new CLIMachs.collections.UniqueCollection( 
+          this.__command = command;
+          this.__groups  = new CLIMachs.collections.UniqueCollection( 
             CLIMachs.fn.currySortAlphabetical() 
           );
-          this.players = new CLIMachs.collections.UniqueCollection( 
+          this.__players = new CLIMachs.collections.UniqueCollection( 
             CLIMachs.fn.currySortAlphabetical() 
           );
 
@@ -73,7 +73,7 @@
          * @memberof CLIMachs.cli.CommandPermissions
          * @description The Command object guarded by this CommandPermissions object.
          */
-        get command () { return this.command; }
+        get command () { return this.__command; }
 
         /**
          * @member {CLIMachs.collections.UniqueCollection} groups
@@ -81,7 +81,7 @@
          * @memberof CLIMachs.cli.CommandPermissions
          * @description A list of group names used to refer to the CLI's master permission groups.
          */
-        get groups () { return this.groups.data; }
+        get groups () { return this.__groups.data; }
 
         /**
          * @member {CLIMachs.collections.UniqueCollection} groups
@@ -93,7 +93,7 @@
          * Note: This getter returns a shallow copy of the data array, so operating on it will not 
          * affect the collection.
          */
-        get players () { return this.players.data; }
+        get players () { return this.__players.data; }
 
       // Public Functions
 
@@ -124,12 +124,12 @@
 
           // Add the group to the list. 
           try { 
-            this.groups.add( groupName ); 
+            this.__groups.add( groupName ); 
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.error.ConflictError ) {
               e.message = `The "${ groupName }" group already has permission to execute the ` +
-               `"${ this.command.fullSignature }" command, so it cannot be added.`;
+               `"${ this.__command.fullSignature }" command, so it cannot be added.`;
             }
             throw e;
           }
@@ -168,12 +168,12 @@
 
           // Try to add the player ID to the players array.
           try {
-            this.players.add( playerId );
+            this.__players.add( playerId );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.ConflictError ) {
               e.message = `${ playerName } already has permission to execute the ` +
-               `"${ this.command.fullSignature }" command, so they cannot be added.`;
+               `"${ this.__command.fullSignature }" command, so they cannot be added.`;
             }
             throw e;
           }
@@ -206,12 +206,12 @@
 
           // Try to remove the group.
           try {
-            this.groups.remove( groupName );
+            this.__groups.remove( groupName );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.NotFoundError ) {
               e.message = `The "${ groupName }" doesn't have permission to execute the ` + 
-                `"${ this.command.fullSignature }" command, so it cannot be removed.`;
+                `"${ this.__command.fullSignature }" command, so it cannot be removed.`;
             }
             throw e;
           }
@@ -251,12 +251,12 @@
 
           // Try to remove the player.
           try {
-            this.players.remove( playerId );
+            this.__players.remove( playerId );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.NotFoundError ) {
               e.message = `${ playerName } doesn't have permission to execute the ` + 
-                `"${ this.command.fullSignature }" command, so they cannot be removed.`;
+                `"${ this.__command.fullSignature }" command, so they cannot be removed.`;
             }
             throw e;
           }
@@ -281,7 +281,7 @@
          */
         test ( message ) {
           
-          if ( !message || message.types !== 'api' ) {
+          if ( !message || message.type !== 'api' ) {
             throw new CLIMachs.errors.ArgumentError( 'message must be a valid Roll20 Message!' );
           }
 
@@ -355,11 +355,11 @@
             throw new CLIMachs.errors.ArgumentError( 'text must be a valid string or Array!' );
           }
 
-          this.message   = message;
-          this.recipient = recipient;
-          this.speaker   = speaker;
-          this.style     = style;
-          this.text      = text;
+          this.__message   = message;
+          this.__recipient = recipient;
+          this.__speaker   = speaker;
+          this.__style     = style;
+          this.__text      = text;
 
         }
 
@@ -371,7 +371,7 @@
          * @memberof CLIMachs.cli.CommandResponse
          * @description The Roll20 message to which this CommandResponse is responding.
          */
-        get message () { return this.message; }
+        get message () { return this.__message; }
 
         /**
          * @member {string} recipient
@@ -380,12 +380,12 @@
          * @description The intended recipient of this message. Valid options are: [ 'gm', 'all', 
          * 'self' ] or a player's name to whisper to.
          */
-        get recipient () { return this.recipient; }
+        get recipient () { return this.__recipient; }
         set recipient ( value ) { 
           if ( typeof( recipient ) !== 'string' ) {
             throw new CLIMachs.errors.ArgumentError( 'recipient must be a valid string!' );
           }
-          this.recipient = value; 
+          this.__recipient = value; 
         }
 
         /**
@@ -394,12 +394,12 @@
          * @memberof CLIMachs.cli.CommandResponse
          * @description A name for the response text to be spoken as.
          */
-        get speaker () { return this.speaker; }
+        get speaker () { return this.__speaker; }
         set speaker ( value ) { 
           if ( typeof( speaker ) !== 'string' ) {
             throw new CLIMachs.errors.ArgumentError( 'speaker must be a valid string or Array!' );
           }
-          this.speaker = value; 
+          this.__speaker = value; 
         }
 
         /**
@@ -408,12 +408,12 @@
          * @memberof CLIMachs.cli.CommandResponse
          * @description Inline style rules to be used in HTML output.
          */
-        get style () { return this.style; }
+        get style () { return this.__style; }
         set style ( value ) { 
           if ( typeof( style ) !== 'string' ) {
             throw new CLIMachs.errors.ArgumentError( 'style must be a valid string!' );
           }
-          this.style = value; 
+          this.__style = value; 
         }
 
         /**
@@ -423,12 +423,12 @@
          * @description The text of the response (can contain HTML or or markdown as per the Roll20 
          * chat docs).
          */
-        get text () { return this.text; }
+        get text () { return this.__text; }
         set text ( value ) { 
           if ( typeof( value ) !== 'string' && !( value instanceof Array ) ) {
             throw new CLIMachs.errors.ArgumentError( 'text must be a valid string or Array!' );
           }
-          this.text = value; 
+          this.__text = value; 
         }
 
     };
@@ -476,18 +476,18 @@
             throw new CLIMachs.errors.ArgumentError( 'syntax must be a valid string!' );
           }
 
-          this.aliases     = new CLIMachs.collections.UniqueCollection(
+          this.__aliases     = new CLIMachs.collections.UniqueCollection(
             CLIMachs.fn.currySortAlphabetical()
           );
-          this.callback    = callback;
-          this.description = description;
-          this.parent      = null;
-          this.permissions = new CLIMachs.cli.CommandPermissions();
-          this.signature   = signature;
-          this.subcommands = new CLIMachs.collections.UniqueKeyedCollection(
+          this.__callback    = callback;
+          this.__description = description;
+          this.__parent      = null;
+          this.__permissions = new CLIMachs.cli.CommandPermissions();
+          this.__signature   = signature;
+          this.__subcommands = new CLIMachs.collections.UniqueKeyedCollection(
             'signature', CLIMachs.fn.currySortAlphabeticalByKey( 'signature' )
           );
-          this.syntax      = syntax;
+          this.__syntax      = syntax;
 
         }
 
@@ -503,7 +503,7 @@
          * Note: This getter returns a shallow copy of the data array, so operating on it will not 
          * affect the collection.
          */
-        get aliases () { return this.aliases.data; }
+        get aliases () { return this.__aliases.data; }
 
         /**
          * @member {function} callback
@@ -513,7 +513,7 @@
          * matched and executed. Expects a function of the form: 
          * ( argumentTokens, message ) => {} : string.
          */
-        get callback () { return this.callback; }
+        get callback () { return this.__callback; }
 
         /**
          * @member {string} description
@@ -523,7 +523,7 @@
          * features and make it easier for users to understand what commands are available and 
          * what they do at a glance.
          */
-        get description () { return this.description; }
+        get description () { return this.__description; }
 
         /**
          * @member {CLIMachs.cli.Command} parent
@@ -532,12 +532,12 @@
          * @description The parent Command object that this command acts as a subcommand of. If 
          * this is null, it indicates that this is a top-level command (not a subcommand).
          */
-        get parent () { return this.parent; }
+        get parent () { return this.__parent; }
         set parent ( value ) {
           if ( !( value instanceof CLIMachs.cli.Command ) ) {
             throw new CLIMachs.errors.ArgumentError( 'parent must be a valid Command object!' );
           }
-          this.parent = value;
+          this.__parent = value;
         }
 
         /**
@@ -547,7 +547,7 @@
          * @description The CommandPermissions object that defines who is permitted to execute this 
          * command and when.
          */
-        get permissions () { return this.permissions; }
+        get permissions () { return this.__permissions; }
 
         /**
          * @member {string} signature
@@ -557,7 +557,7 @@
          * command at the CLI. If you would like to support this command under several different 
          * names/variants, use the aliases array to provide other options.
          */
-        get signature () { return this.signature; }
+        get signature () { return this.__signature; }
 
         /**
          * @member {Array} subcommands
@@ -569,7 +569,7 @@
          * subcommands directly. Note: This getter returns a shallow copy of the data array, so 
          * operating on it will not affect the collection.
          */
-        get subcommands () { return this.subcommands.data; }
+        get subcommands () { return this.__subcommands.data; }
 
         /**
          * @member {string} syntax
@@ -578,7 +578,7 @@
          * @description An example of the syntax of this command, preferably in general form (like 
          * is presented in UNIX-style man pages).
          */
-        get syntax () { return this.syntax; }
+        get syntax () { return this.__syntax; }
 
       // Computed Fields
 
@@ -591,8 +591,8 @@
          * including all aliases and the primary signature.
          */
         get allAliases () { 
-          return this.aliases
-            .concat( this.signature )
+          return this.__aliases
+            .concat( this.__signature )
             .sort( CLIMachs.fn.currySortAlphabetical() ); 
         }
 
@@ -605,7 +605,7 @@
          * command.
          */
         get fullSignature () {
-          return this.fullSignatureTokens.join( ' ' );
+          return this.__fullSignatureTokens.join( ' ' );
         }
 
         /**
@@ -617,9 +617,9 @@
          * this command. 
          */
         get fullSignatureTokens () {
-          const result = [ this.signature ];
-          if ( this.parent ) {
-            result.unshift( this.parent.fullSignature );
+          const result = [ this.__signature ];
+          if ( this.__parent ) {
+            result.unshift( this.__parent.fullSignature );
           }
           return result;
         }
@@ -652,7 +652,7 @@
 
           // Try to add the alias to the list.
           try {
-            this.aliases.add( alias );
+            this.__aliases.add( alias );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.ConflictError ) {
@@ -686,7 +686,7 @@
           }
 
           // Check for any subcommand signatures and/or aliases that collide with the command to add.
-          const collisions = this.subcommands
+          const collisions = this.__subcommands
             .map( subcommand => subcommand.allAliases )
             .reduce( ( acc, sigArr ) => acc.concat( sigArr ), [] )
             .filter( signature => command.allAliases.find( signature ) )
@@ -704,7 +704,7 @@
 
           // Try to add the command to the subcommands array.
           try {
-            this.subcommands.add( command );
+            this.__subcommands.add( command );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.ConflictError ) {
@@ -739,7 +739,7 @@
         execute ( argumentTokens, message ) {
 
           // Test permissions.
-          if ( !this.permissions.test( message ) ) {
+          if ( !this.__permissions.test( message ) ) {
             throw new CLIMachs.errors.CommandError( 'You do not have permission to execute the ' + 
               'requsted command.' );
           }
@@ -766,7 +766,7 @@
 
           // Try to remove the alias from the list.
           try {
-            this.aliases.remove( alias );
+            this.__aliases.remove( alias );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.NotFoundError ) {
@@ -798,7 +798,7 @@
 
           // Try to remove the subcommand from the list.
           try {
-            this.subcommands.remove( signature );
+            this.__subcommands.remove( signature );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.NotFoundError ) {
@@ -829,15 +829,21 @@
          */
         constructor () {
 
-          this.commands = new CLIMachs.collections.UniqueKeyCollection(
+          this.__commands = new CLIMachs.collections.UniqueKeyedCollection(
             'signature', CLIMachs.fn.currySortAlphabeticalByKey( 'signature' ) 
           );
-          this.permissionGroups = new CLIMachs.collections.UniqueKeyCollection(
+          this.__permissionGroups = new CLIMachs.collections.UniqueKeyedCollection(
             'key', CLIMachs.fn.currySortAlphabeticalByKey( 'key' )
           );
-          this.preCommandMiddleware  = new CLIMachs.collections.UniqueKeyCollection( 'key', null );
-          this.preResponseMiddleware = new CLIMachs.collections.UniqueKeyCollection( 'key', null );
-          this.preRoutingMiddleware  = new CLIMachs.collections.UniqueKeyCollection( 'key', null );
+          this.__preCommandMiddleware  = new CLIMachs.collections.UniqueKeyedCollection( 
+            'key', null 
+          );
+          this.__preResponseMiddleware = new CLIMachs.collections.UniqueKeyedCollection( 
+            'key', null 
+          );
+          this.__preRoutingMiddleware  = new CLIMachs.collections.UniqueKeyedCollection( 
+            'key', null 
+          );
 
         }
 
@@ -851,7 +857,7 @@
          * getter returns a shallow copy of the data array, so operating on it will not affect the 
          * collection.
          */
-        get commands () { return this.commands.data; }
+        get commands () { return this.__commands.data; }
 
         /**
          * @member {Array} permissionGroups
@@ -866,7 +872,7 @@
          * collection. Note: This getter returns a shallow copy of the data array, so operating on 
          * it will not affect the collection.
          */
-        get permissionGroups () { return this.permissionGroups.data; }
+        get permissionGroups () { return this.__permissionGroups.data; }
 
         /**
          * @member {Array} preCommandMiddleware
@@ -877,7 +883,7 @@
          * is matched. Note: This getter returns a shallow copy of the data array, so operating on 
          * it will not affect the collection.
          */
-        get preCommandMiddleware () { return this.preCommandMiddleware.data; }
+        get preCommandMiddleware () { return this.__preCommandMiddleware.data; }
 
         /**
          * @member {Array} preResponseMiddleware
@@ -888,7 +894,7 @@
          * command executes to completion without errors. Note: This getter returns a shallow copy 
          * of the data array, so operating on it will not affect the collection.
          */
-        get preResponseMiddleware () { return this.preResponseMiddleware.data; }
+        get preResponseMiddleware () { return this.__preResponseMiddleware.data; }
 
         /**
          * @member {Array} preRoutingMiddleware
@@ -899,7 +905,7 @@
          * there are 1 or more tokens. Note: This getter returns a shallow copy of the data array, 
          * so operating on it will not affect the collection.
          */
-        get preRoutingMiddleware () { return this.preRoutingMiddleware.data; }
+        get preRoutingMiddleware () { return this.__preRoutingMiddleware.data; }
 
       // Computed Fields
 
@@ -922,7 +928,7 @@
             return commands
               .reduce( ( acc, command ) => acc.concat( recurse( acc, command.subcommands ) ) );
           }
-          return recurse( [], this.commands );
+          return recurse( [], this.__commands );
 
         }
 
@@ -948,7 +954,7 @@
           }
 
           // Check for any subcommand signatures and/or aliases that collide with the command to add.
-          const collisions = this.commands
+          const collisions = this.__commands
             .map( subcommand => subcommand.allAliases )
             .reduce( ( acc, sigArr ) => acc.concat( sigArr ), [] )
             .filter( signature => command.allAliases.find( signature ) )
@@ -966,7 +972,7 @@
 
           // Try to add the command to the commands array.
           try {
-            this.commands.add( command );
+            this.__commands.add( command );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.ConflictError ) {
@@ -1000,7 +1006,7 @@
           // Create a new Callback object and try to add it to the pre-command middleware collection.
           try {
             const middleware = new CLIMachs.collections.Callback( groupName, callback );
-            this.permissionGroup.add( middleware );
+            this.__permissionGroups.add( middleware );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.ConflictError ) {
@@ -1043,7 +1049,7 @@
           // Create a new Callback object and try to add it to the pre-command middleware collection.
           try {
             const middleware = new CLIMachs.collections.Callback( key, callback );
-            this.preCommandMiddleware.add( middleware, index );
+            this.__preCommandMiddleware.add( middleware, index );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.ConflictError ) {
@@ -1085,7 +1091,7 @@
           // Create a new Callback object and try to add it to the pre-response middleware collection.
           try {
             const middleware = new CLIMachs.collections.Callback( key, callback );
-            this.preResponseMiddleware.add( middleware, index );
+            this.__preResponseMiddleware.add( middleware, index );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.ConflictError ) {
@@ -1128,7 +1134,7 @@
           // Create a new Callback object and try to add it to the pre-routing middleware collection.
           try {
             const middleware = new CLIMachs.collections.Callback( key, callback );
-            this.preRoutingMiddleware.add( middleware, index );
+            this.__preRoutingMiddleware.add( middleware, index );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.ConflictError ) {
@@ -1211,7 +1217,7 @@
 
           // Try to remove the command from the list.
           try {
-            this.commands.remove( signature );
+            this.__commands.remove( signature );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.NotFoundError ) {
@@ -1252,7 +1258,7 @@
 
           // Try to remove the permission group from the list.
           try {
-            this.permissionGroups.remove( groupName );
+            this.__permissionGroups.remove( groupName );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.NotFoundError ) {
@@ -1284,7 +1290,7 @@
 
           // Try to remove the middleware from the list.
           try {
-            this.preCommandMiddleware.remove( key );
+            this.__preCommandMiddleware.remove( key );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.NotFoundError ) {
@@ -1316,7 +1322,7 @@
 
           // Try to remove the middleware from the list.
           try {
-            this.preResponseMiddleware.remove( key );
+            this.__preResponseMiddleware.remove( key );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.NotFoundError ) {
@@ -1348,7 +1354,7 @@
 
           // Try to remove the middleware from the list.
           try {
-            this.preRoutingMiddleware.remove( key );
+            this.__preRoutingMiddleware.remove( key );
           }
           catch ( e ) {
             if ( e instanceof CLIMachs.errors.NotFoundError ) {
@@ -1409,7 +1415,7 @@
           }
 
           // Run each of the pre-routing middleware callbacks.
-          const continueToRouting = this.preRoutingMiddleware
+          const continueToRouting = this.__preRoutingMiddleware
             .forEach( x => x.callback( tokens, message ) )
             .map( x => x.callback( tokens, message ) )
             .reduce( ( acc, result ) => !acc ? false : ( acc && result ), true );
@@ -1426,7 +1432,7 @@
           }
 
           // Run each of the pre-command middleware callbacks.
-          const continueToCommand = this.preCommandMiddleware
+          const continueToCommand = this.__preCommandMiddleware
             .map( x => x.callback( command, tokens, message ) )
             .reduce( ( acc, result ) => !acc ? false : ( acc && result ), true );
           if ( !continueToCommand ) {
@@ -1437,7 +1443,7 @@
           const response = command.execute( tokens, message );
 
           // Run each of the pre-response middleware callbacks.
-          const continueToResponse = this.preResponseMiddleware
+          const continueToResponse = this.__preResponseMiddleware
             .map( x => x.callback( response, message ) )
             .reduce( ( acc, result ) => !acc ? false : ( acc && result ), true );
           if ( !continueToResponse ) {
@@ -1594,16 +1600,3 @@
         }
 
     };
-
-
-// Start Up
-
-  ( function startup() {
-
-    // Store the CLI state by starting up a CLI instance.
-    CLIMachs.state = new CLIMachs.cli.CLI();
-
-    // Start up the CLI when the sandbox ready event is emitted.
-    on( 'ready', CLIMachs.state.onReady );
-
-  } )();

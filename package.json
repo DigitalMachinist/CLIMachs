@@ -2,7 +2,7 @@
   "name": "CLIMachs",
   "version": "0.0.1",
   "description": "A complete CLI command framework for the Roll20.net scripting API.",
-  "main": "index.js",
+  "main": "CLIMachs.js",
   "directories": {
     "doc": "docs"
   },
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/DigitalMachinist/roll20-cypher-system.git"
+    "url": "https://github.com/DigitalMachinist/CLIMachs.git"
   },
   "author": "Jeff Rose",
   "license": "WTFPL",
   "bugs": {
-    "url": "https://github.com/DigitalMachinist/roll20-cypher-system/issues"
+    "url": "https://github.com/DigitalMachinist/CLIMachs/issues"
   },
-  "homepage": "https://github.com/DigitalMachinist/roll20-cypher-system",
+  "homepage": "https://github.com/DigitalMachinist/CLIMachs",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-babel": "^5.0.3",

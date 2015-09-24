@@ -61,6 +61,7 @@ Initial release!
 
   - Jasmine unit tests
   - CLIMachs Reference Manual
+  - sendChat use name|id format to get full avatar support
 
 ## Init
 

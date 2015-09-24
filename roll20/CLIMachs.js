@@ -1,4 +1,4 @@
-/*! 2015-09-23 -- CLIMachs Roll20 Command Framework (v0.0.1) -- See https://github.com/DigitalMachinist/roll20-cypher-system.git for the full source code. */
+/*! 2015-09-23 -- CLIMachs Roll20 Command Framework (v0.0.1) -- See https://github.com/DigitalMachinist/CLIMachs.git for the full source code. */
 "use strict";
 
 function _inherits(a, b) {
@@ -53,97 +53,97 @@ CLIMachs.collections.Callback = function() {
         if (_classCallCheck(this, a), "function" != typeof c) throw new CLIMachs.type.ArgumentError("fn must be a valid function!");
         if ("string" != typeof b) throw new CLIMachs.type.ArgumentError("key must be a valid string!");
         if (!/['"]/g.test(b)) throw new CLIMachs.type.ArgumentError("key must not contain any single-quotes or double-quotes!");
-        this.fn = c, this.key = b;
+        this.__fn = c, this.__key = b;
     }
     return _createClass(a, [ {
         key: "fn",
         get: function() {
-            return this.fn;
+            return this.__fn;
         }
     }, {
         key: "key",
         get: function() {
-            return this.key;
+            return this.__key;
         }
     } ]), a;
 }(), CLIMachs.collections.UniqueCollection = function() {
     function a() {
         var b = arguments.length <= 0 || void 0 === arguments[0] ? null : arguments[0];
-        if (_classCallCheck(this, a), null !== b || "function" != typeof b) throw new CLIMachs.types.ArgumentError("sortingFunction must be a valid function!");
-        this.data = [], this.sortingFunction = b;
+        if (_classCallCheck(this, a), null !== b && "function" != typeof b) throw new CLIMachs.errors.ArgumentError("sortingFunction must be a valid function!");
+        this.__data = [], this.__sortingFunction = b;
     }
     return _createClass(a, [ {
         key: "add",
         value: function(a) {
             var b = arguments.length <= 1 || void 0 === arguments[1] ? -1 : arguments[1];
-            if ("object" != typeof a) throw new CLIMachs.types.ArgumentError("item must be a valid object!");
-            if (!a.key) throw new CLIMachs.types.ArgumentError("item must have a key property!");
-            if ("number" != typeof b) throw new CLIMachs.types.ArgumentError("index must be a valid number!");
-            if (-1 > b || b >= this.data.length) throw new CLIMachs.types.ArgumentError("index out of range!");
-            var c = this.data.findIndex(a);
-            if (c > -1) throw new CLIMachs.types.ConflictError("An item already exists with a value of " + (a.key + "."));
-            -1 === b ? this.data.splice(b, 0, a) : this.data.push(a), this.sortingFunction && this.data.sort(this.sortingFunction);
+            if ("object" != typeof a) throw new CLIMachs.errors.ArgumentError("item must be a valid object!");
+            if (!a.key) throw new CLIMachs.errors.ArgumentError("item must have a key property!");
+            if ("number" != typeof b) throw new CLIMachs.errors.ArgumentError("index must be a valid number!");
+            if (-1 > b || b >= this.__data.length) throw new CLIMachs.errors.ArgumentError("index out of range!");
+            var c = this.__data.findIndex(a);
+            if (c > -1) throw new CLIMachs.errors.ConflictError("An item already exists with a value of " + (a.key + "."));
+            -1 === b ? this.__data.splice(b, 0, a) : this.__data.push(a), this.__sortingFunction && this.__data.sort(this.__sortingFunction);
         }
     }, {
         key: "remove",
         value: function(a) {
-            var b = this.data.findIndex(a);
-            if (0 > b) throw new CLIMachs.types.NotFoundError("No item could be found with a value of" + (a + "."));
-            return this.data.splice(b, 1);
+            var b = this.__data.findIndex(a);
+            if (0 > b) throw new CLIMachs.errors.NotFoundError("No item could be found with a value of" + (a + "."));
+            return this.__data.splice(b, 1);
         }
     }, {
         key: "data",
         get: function() {
-            return this.data.slice();
+            return this.__data.slice();
         }
     }, {
         key: "sortingFunction",
         get: function() {
-            return this.sortingFunction;
+            return this.__sortingFunction;
         },
         set: function(a) {
-            if (null !== a || "function" != typeof a) throw new CLIMachs.types.ArgumentError("sortingFunction must be a valid function!");
-            this.sortingFunction = a;
+            if (null !== a && "function" != typeof a) throw new CLIMachs.errors.ArgumentError("sortingFunction must be a valid function!");
+            this.__sortingFunction = a;
         }
     } ]), a;
 }(), CLIMachs.collections.UniqueKeyedCollection = function(a) {
     function b(a) {
         var c = arguments.length <= 1 || void 0 === arguments[1] ? null : arguments[1];
-        if (_classCallCheck(this, b), "string" != typeof a) throw new CLIMachs.types.ArgumentError("keyProperty must be a valid string!");
-        _get(Object.getPrototypeOf(b.prototype), "constructor", this).call(this, c), this.keyProp = a;
+        if (_classCallCheck(this, b), "string" != typeof a) throw new CLIMachs.errors.ArgumentError("keyProperty must be a valid string!");
+        _get(Object.getPrototypeOf(b.prototype), "constructor", this).call(this, c), this.__keyProperty = a;
     }
     return _inherits(b, a), _createClass(b, [ {
         key: "add",
         value: function(a) {
             var b = this, c = arguments.length <= 1 || void 0 === arguments[1] ? -1 : arguments[1];
-            if ("object" != typeof a) throw new CLIMachs.types.ArgumentError("item must be a valid object!");
-            if ("undefined" != typeof a[this.keyProperty]) throw new CLIMachs.types.ArgumentError("item must have a " + this.keyProp + "property!");
-            if ("number" != typeof c) throw new CLIMachs.types.ArgumentError("index must be a valid number!");
-            if (-1 > c || c >= this.data.length) throw new CLIMachs.types.ArgumentError("index out of range!");
-            var d = this.data.filter(function(c) {
-                return c[b.keyProp] === a[b.keyProp];
+            if ("object" != typeof a) throw new CLIMachs.errors.ArgumentError("item must be a valid object!");
+            if ("undefined" != typeof a[this.__keyProperty]) throw new CLIMachs.errors.ArgumentError("item must have a " + this.__keyProperty + "property!");
+            if ("number" != typeof c) throw new CLIMachs.errors.ArgumentError("index must be a valid number!");
+            if (-1 > c || c >= this.__data.length) throw new CLIMachs.errors.ArgumentError("index out of range!");
+            var d = this.__data.filter(function(c) {
+                return c[b.__keyProperty] === a[b.__keyProperty];
             });
-            if (d.length > 0) throw new CLIMachs.types.ConflictError("An item already exists with a unique key" + ("of " + a[this.keyProp] + "."));
-            -1 === c ? this.data.splice(c, 0, a) : this.data.push(a), this.sortingFunction && this.data.sort(this.sortingFunction);
+            if (d.length > 0) throw new CLIMachs.errors.ConflictError("An item already exists with a unique key" + ("of " + a[this.__keyProperty] + "."));
+            -1 === c ? this.__data.splice(c, 0, a) : this.__data.push(a), this.__sortingFunction && this.__data.sort(this.__sortingFunction);
         }
     }, {
         key: "remove",
         value: function(a) {
-            var b = this, c = this.data.map(function(a, c) {
+            var b = this, c = this.__data.map(function(a, c) {
                 return {
-                    key: a[b.keyProp],
+                    key: a[b.__keyProperty],
                     index: c
                 };
             }).filter(function(c) {
-                return c[b.keyProp] === a;
+                return c[b.__keyProperty] === a;
             });
-            if (0 === c.length) throw new CLIMachs.types.NotFoundError("No item could be found with a unique key" + ("of " + a + "."));
-            return this.data.splice(c[0].index, 1);
+            if (0 === c.length) throw new CLIMachs.errors.NotFoundError("No item could be found with a unique key" + ("of " + a + "."));
+            return this.__data.splice(c[0].index, 1);
         }
     }, {
-        key: "keyProp",
+        key: "keyProperty",
         get: function() {
-            return this.keyProp;
+            return this.__keyProperty;
         }
     } ]), b;
 }(CLIMachs.collections.UniqueCollection), CLIMachs.errors.ArgumentError = function(a) {
@@ -185,14 +185,18 @@ CLIMachs.collections.Callback = function() {
     }, {
         caseInsensitive: !0
     });
-    if (b && b.length > 0) return b[0].id;
+    if (b && b.length > 0) return b[0].get("id");
     var c = findObjs({
         type: "character",
         name: a
     }, {
         caseInsensitive: !0
     });
-    return c && c.length > 0 && c.controlledby.length > 0 ? c[0].controlledby[0].id : -1;
+    if (c && c.length > 0) {
+        var d = c[0].get("controlledby");
+        if (d.length > 0) return d[0];
+    }
+    return -1;
 }, CLIMachs.fn.htmlEscape = function(a) {
     return String(a).replace(/\n/g, "<br />").replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }, CLIMachs.fn.htmlUnescape = function(a) {
@@ -205,8 +209,8 @@ CLIMachs.collections.Callback = function() {
 }(Error), CLIMachs.cli = {}, CLIMachs.cli.CommandPermissions = function() {
     function a(b) {
         if (_classCallCheck(this, a), !(b instanceof CLIMachs.cli.Command)) throw new CLIMachs.errors.ArgumentError("command must be a valid Command object!");
-        this.command = b, this.groups = new CLIMachs.collections.UniqueCollection(CLIMachs.fn.currySortAlphabetical()), 
-        this.players = new CLIMachs.collections.UniqueCollection(CLIMachs.fn.currySortAlphabetical());
+        this.__command = b, this.__groups = new CLIMachs.collections.UniqueCollection(CLIMachs.fn.currySortAlphabetical()), 
+        this.__players = new CLIMachs.collections.UniqueCollection(CLIMachs.fn.currySortAlphabetical());
     }
     return _createClass(a, [ {
         key: "addGroup",
@@ -215,9 +219,9 @@ CLIMachs.collections.Callback = function() {
             var b = CLIMachs.__state.permissionGroups.find(a);
             if (!b) throw new CLIMachs.errors.NotFoundError("No permission group exists by that name!");
             try {
-                this.groups.add(a);
+                this.__groups.add(a);
             } catch (c) {
-                throw c instanceof CLIMachs.error.ConflictError && (c.message = 'The "' + a + '" group already has permission to execute the ' + ('"' + this.command.fullSignature + '" command, so it cannot be added.')), 
+                throw c instanceof CLIMachs.error.ConflictError && (c.message = 'The "' + a + '" group already has permission to execute the ' + ('"' + this.__command.fullSignature + '" command, so it cannot be added.')), 
                 c;
             }
             return this;
@@ -229,9 +233,9 @@ CLIMachs.collections.Callback = function() {
             var b = CLIMachs.fn.getPlayerIdByName(a);
             if (0 > b) throw new CLIMachs.errors.NotFoundError("No player exists by that name" + ("(" + a + ")."));
             try {
-                this.players.add(b);
+                this.__players.add(b);
             } catch (c) {
-                throw c instanceof CLIMachs.errors.ConflictError && (c.message = a + " already has permission to execute the " + ('"' + this.command.fullSignature + '" command, so they cannot be added.')), 
+                throw c instanceof CLIMachs.errors.ConflictError && (c.message = a + " already has permission to execute the " + ('"' + this.__command.fullSignature + '" command, so they cannot be added.')), 
                 c;
             }
             return this;
@@ -241,9 +245,9 @@ CLIMachs.collections.Callback = function() {
         value: function(a) {
             if ("string" != typeof a) throw new CLIMachs.errors.ArgumentError("groupName must be a valid string!");
             try {
-                this.groups.remove(a);
+                this.__groups.remove(a);
             } catch (b) {
-                throw b instanceof CLIMachs.errors.NotFoundError && (b.message = 'The "' + a + "\" doesn't have permission to execute the " + ('"' + this.command.fullSignature + '" command, so it cannot be removed.')), 
+                throw b instanceof CLIMachs.errors.NotFoundError && (b.message = 'The "' + a + "\" doesn't have permission to execute the " + ('"' + this.__command.fullSignature + '" command, so it cannot be removed.')), 
                 b;
             }
             return this;
@@ -255,9 +259,9 @@ CLIMachs.collections.Callback = function() {
             var b = CLIMachs.fn.getPlayerIdByName(a);
             if (0 > b) throw new CLIMachs.errors.NotFoundError("No player exists by that name" + ("(" + a + ")."));
             try {
-                this.players.remove(b);
+                this.__players.remove(b);
             } catch (c) {
-                throw c instanceof CLIMachs.errors.NotFoundError && (c.message = a + " doesn't have permission to execute the " + ('"' + this.command.fullSignature + '" command, so they cannot be removed.')), 
+                throw c instanceof CLIMachs.errors.NotFoundError && (c.message = a + " doesn't have permission to execute the " + ('"' + this.__command.fullSignature + '" command, so they cannot be removed.')), 
                 c;
             }
             return this;
@@ -265,7 +269,7 @@ CLIMachs.collections.Callback = function() {
     }, {
         key: "test",
         value: function(a) {
-            if (!a || "api" !== a.types) throw new CLIMachs.errors.ArgumentError("message must be a valid Roll20 Message!");
+            if (!a || "api" !== a.type) throw new CLIMachs.errors.ArgumentError("message must be a valid Roll20 Message!");
             return playerIsGM(a.playerid) ? !0 : this.players.find(a.playerid) ? !0 : this.groups.data.map(function(a) {
                 return CLIMachs.__state.permissionGroups[a];
             }).filter(function(a) {
@@ -277,17 +281,17 @@ CLIMachs.collections.Callback = function() {
     }, {
         key: "command",
         get: function() {
-            return this.command;
+            return this.__command;
         }
     }, {
         key: "groups",
         get: function() {
-            return this.groups.data;
+            return this.__groups.data;
         }
     }, {
         key: "players",
         get: function() {
-            return this.players.data;
+            return this.__players.data;
         }
     } ]), a;
 }(), CLIMachs.cli.CommandResponse = function() {
@@ -298,48 +302,48 @@ CLIMachs.collections.Callback = function() {
         if ("string" != typeof f) throw new CLIMachs.errors.ArgumentError("speaker must be a valid string!");
         if ("string" != typeof e) throw new CLIMachs.errors.ArgumentError("style must be a valid string!");
         if ("string" != typeof c && !(c instanceof Array)) throw new CLIMachs.errors.ArgumentError("text must be a valid string or Array!");
-        this.message = b, this.recipient = d, this.speaker = f, this.style = e, this.text = c;
+        this.__message = b, this.__recipient = d, this.__speaker = f, this.__style = e, this.__text = c;
     }
     return _createClass(a, [ {
         key: "message",
         get: function() {
-            return this.message;
+            return this.__message;
         }
     }, {
         key: "recipient",
         get: function() {
-            return this.recipient;
+            return this.__recipient;
         },
         set: function(a) {
             if ("string" != typeof recipient) throw new CLIMachs.errors.ArgumentError("recipient must be a valid string!");
-            this.recipient = a;
+            this.__recipient = a;
         }
     }, {
         key: "speaker",
         get: function() {
-            return this.speaker;
+            return this.__speaker;
         },
         set: function(a) {
             if ("string" != typeof speaker) throw new CLIMachs.errors.ArgumentError("speaker must be a valid string or Array!");
-            this.speaker = a;
+            this.__speaker = a;
         }
     }, {
         key: "style",
         get: function() {
-            return this.style;
+            return this.__style;
         },
         set: function(a) {
             if ("string" != typeof style) throw new CLIMachs.errors.ArgumentError("style must be a valid string!");
-            this.style = a;
+            this.__style = a;
         }
     }, {
         key: "text",
         get: function() {
-            return this.text;
+            return this.__text;
         },
         set: function(a) {
             if ("string" != typeof a && !(a instanceof Array)) throw new CLIMachs.errors.ArgumentError("text must be a valid string or Array!");
-            this.text = a;
+            this.__text = a;
         }
     } ]), a;
 }(), CLIMachs.cli.Command = function() {
@@ -349,10 +353,10 @@ CLIMachs.collections.Callback = function() {
         if ("string" != typeof b) throw new CLIMachs.errors.ArgumentError("signature must be a valid string!");
         if (!/['"]/g.test(b)) throw new CLIMachs.errors.ArgumentError("signature must not contain any single-quotes or double-quotes!");
         if ("string" != typeof d) throw new CLIMachs.errors.ArgumentError("syntax must be a valid string!");
-        this.aliases = new CLIMachs.collections.UniqueCollection(CLIMachs.fn.currySortAlphabetical()), this.callback = e, 
-        this.description = c, this.parent = null, this.permissions = new CLIMachs.cli.CommandPermissions(), 
-        this.signature = b, this.subcommands = new CLIMachs.collections.UniqueKeyedCollection("signature", CLIMachs.fn.currySortAlphabeticalByKey("signature")), 
-        this.syntax = d;
+        this.__aliases = new CLIMachs.collections.UniqueCollection(CLIMachs.fn.currySortAlphabetical()), this.__callback = e, 
+        this.__description = c, this.__parent = null, this.__permissions = new CLIMachs.cli.CommandPermissions(), 
+        this.__signature = b, this.__subcommands = new CLIMachs.collections.UniqueKeyedCollection("signature", CLIMachs.fn.currySortAlphabeticalByKey("signature")), 
+        this.__syntax = d;
     }
     return _createClass(a, [ {
         key: "addAlias",
@@ -360,7 +364,7 @@ CLIMachs.collections.Callback = function() {
             if ("string" != typeof a) throw new CLIMachs.errors.ArgumentError("alias must be a valid string!");
             if (!/['"]/g.test(a)) throw new CLIMachs.errors.ArgumentError("alias must not contain any single-quotes or double-quotes!");
             try {
-                this.aliases.add(a);
+                this.__aliases.add(a);
             } catch (b) {
                 throw b instanceof CLIMachs.errors.ConflictError && (b.message = "The " + a + " alias already exists, so it cannot be added."), 
                 b;
@@ -371,7 +375,7 @@ CLIMachs.collections.Callback = function() {
         key: "addSubcommand",
         value: function(a) {
             if (!(a instanceof CLIMachs.cli.Command)) throw new CLIMachs.errors.ArgumentError("command must be a valid Command object!");
-            var b = this.subcommands.map(function(a) {
+            var b = this.__subcommands.map(function(a) {
                 return a.allAliases;
             }).reduce(function(a, b) {
                 return a.concat(b);
@@ -381,7 +385,7 @@ CLIMachs.collections.Callback = function() {
             if (b.length > 0) throw new CLIMachs.errors.ConflictError('The "' + a.signature + '" subcommandcollides with some existing command signatures/aliases, so it cannot be added!Commands: ' + b);
             a.parent = this;
             try {
-                this.subcommands.add(a);
+                this.__subcommands.add(a);
             } catch (c) {
                 throw c instanceof CLIMachs.errors.ConflictError && (c.message = 'The "' + a.signature + '" subcommand already exists, so it cannot be added.'), 
                 c;
@@ -391,14 +395,14 @@ CLIMachs.collections.Callback = function() {
     }, {
         key: "execute",
         value: function(a, b) {
-            if (!this.permissions.test(b)) throw new CLIMachs.errors.CommandError("You do not have permission to execute the requsted command.");
+            if (!this.__permissions.test(b)) throw new CLIMachs.errors.CommandError("You do not have permission to execute the requsted command.");
             return this.callback(arguments, b);
         }
     }, {
         key: "removeAlias",
         value: function(a) {
             try {
-                this.aliases.remove(a);
+                this.__aliases.remove(a);
             } catch (b) {
                 throw b instanceof CLIMachs.errors.NotFoundError && (b.message = "The " + a + " alias could not be found, so it cannot be removed."), 
                 b;
@@ -409,7 +413,7 @@ CLIMachs.collections.Callback = function() {
         key: "removeSubcommand",
         value: function(a) {
             try {
-                this.subcommands.remove(a);
+                this.__subcommands.remove(a);
             } catch (b) {
                 throw b instanceof CLIMachs.errors.NotFoundError && (b.message = "The " + a + " subcommand could not be found, so it cannot be removed."), 
                 b;
@@ -419,76 +423,76 @@ CLIMachs.collections.Callback = function() {
     }, {
         key: "aliases",
         get: function() {
-            return this.aliases.data;
+            return this.__aliases.data;
         }
     }, {
         key: "callback",
         get: function() {
-            return this.callback;
+            return this.__callback;
         }
     }, {
         key: "description",
         get: function() {
-            return this.description;
+            return this.__description;
         }
     }, {
         key: "parent",
         get: function() {
-            return this.parent;
+            return this.__parent;
         },
         set: function(a) {
             if (!(a instanceof CLIMachs.cli.Command)) throw new CLIMachs.errors.ArgumentError("parent must be a valid Command object!");
-            this.parent = a;
+            this.__parent = a;
         }
     }, {
         key: "permissions",
         get: function() {
-            return this.permissions;
+            return this.__permissions;
         }
     }, {
         key: "signature",
         get: function() {
-            return this.signature;
+            return this.__signature;
         }
     }, {
         key: "subcommands",
         get: function() {
-            return this.subcommands.data;
+            return this.__subcommands.data;
         }
     }, {
         key: "syntax",
         get: function() {
-            return this.syntax;
+            return this.__syntax;
         }
     }, {
         key: "allAliases",
         get: function() {
-            return this.aliases.concat(this.signature).sort(CLIMachs.fn.currySortAlphabetical());
+            return this.__aliases.concat(this.__signature).sort(CLIMachs.fn.currySortAlphabetical());
         }
     }, {
         key: "fullSignature",
         get: function() {
-            return this.fullSignatureTokens.join(" ");
+            return this.__fullSignatureTokens.join(" ");
         }
     }, {
         key: "fullSignatureTokens",
         get: function() {
-            var a = [ this.signature ];
-            return this.parent && a.unshift(this.parent.fullSignature), a;
+            var a = [ this.__signature ];
+            return this.__parent && a.unshift(this.__parent.fullSignature), a;
         }
     } ]), a;
 }(), CLIMachs.cli.CLI = function() {
     function a() {
-        _classCallCheck(this, a), this.commands = new CLIMachs.collections.UniqueKeyCollection("signature", CLIMachs.fn.currySortAlphabeticalByKey("signature")), 
-        this.permissionGroups = new CLIMachs.collections.UniqueKeyCollection("key", CLIMachs.fn.currySortAlphabeticalByKey("key")), 
-        this.preCommandMiddleware = new CLIMachs.collections.UniqueKeyCollection("key", null), this.preResponseMiddleware = new CLIMachs.collections.UniqueKeyCollection("key", null), 
-        this.preRoutingMiddleware = new CLIMachs.collections.UniqueKeyCollection("key", null);
+        _classCallCheck(this, a), this.__commands = new CLIMachs.collections.UniqueKeyedCollection("signature", CLIMachs.fn.currySortAlphabeticalByKey("signature")), 
+        this.__permissionGroups = new CLIMachs.collections.UniqueKeyedCollection("key", CLIMachs.fn.currySortAlphabeticalByKey("key")), 
+        this.__preCommandMiddleware = new CLIMachs.collections.UniqueKeyedCollection("key", null), this.__preResponseMiddleware = new CLIMachs.collections.UniqueKeyedCollection("key", null), 
+        this.__preRoutingMiddleware = new CLIMachs.collections.UniqueKeyedCollection("key", null);
     }
     return _createClass(a, [ {
         key: "addCommand",
         value: function(a) {
             if (!(a instanceof CLIMachs.cli.Command)) throw new CLIMachs.errors.ArgumentError("command must be a valid Command object!");
-            var b = this.commands.map(function(a) {
+            var b = this.__commands.map(function(a) {
                 return a.allAliases;
             }).reduce(function(a, b) {
                 return a.concat(b);
@@ -498,7 +502,7 @@ CLIMachs.collections.Callback = function() {
             if (b.length > 0) throw new CLIMachs.errors.ConflictError("The " + a.signature + " command collideswith existing command signatures/aliases, so it cannot be added! Commands: " + b);
             a.parent = null;
             try {
-                this.commands.add(a);
+                this.__commands.add(a);
             } catch (c) {
                 throw c instanceof CLIMachs.errors.ConflictError && (c.message = 'The "' + a.signature + '" subcommand already exists, so it cannot be added.'), 
                 c;
@@ -510,7 +514,7 @@ CLIMachs.collections.Callback = function() {
         value: function(a, b) {
             try {
                 var c = new CLIMachs.collections.Callback(a, b);
-                this.permissionGroup.add(c);
+                this.__permissionGroups.add(c);
             } catch (d) {
                 throw d instanceof CLIMachs.errors.ConflictError && (d.message = 'The "' + a + '" permission group already exists, so it cannot be added.'), 
                 d;
@@ -523,7 +527,7 @@ CLIMachs.collections.Callback = function() {
             var c = arguments.length <= 2 || void 0 === arguments[2] ? -1 : arguments[2];
             try {
                 var d = new CLIMachs.collections.Callback(a, b);
-                this.preCommandMiddleware.add(d, c);
+                this.__preCommandMiddleware.add(d, c);
             } catch (e) {
                 throw e instanceof CLIMachs.errors.ConflictError && (e.message = 'The "' + a + '" pre-command middleware already exists, so it cannot be added.'), 
                 e;
@@ -536,7 +540,7 @@ CLIMachs.collections.Callback = function() {
             var c = arguments.length <= 2 || void 0 === arguments[2] ? -1 : arguments[2];
             try {
                 var d = new CLIMachs.collections.Callback(a, b);
-                this.preResponseMiddleware.add(d, c);
+                this.__preResponseMiddleware.add(d, c);
             } catch (e) {
                 throw e instanceof CLIMachs.errors.ConflictError && (e.message = 'The "' + a + '" pre-response middleware already exists, so it cannot be added.'), 
                 e;
@@ -549,7 +553,7 @@ CLIMachs.collections.Callback = function() {
             var c = arguments.length <= 2 || void 0 === arguments[2] ? -1 : arguments[2];
             try {
                 var d = new CLIMachs.collections.Callback(a, b);
-                this.preRoutingMiddleware.add(d, c);
+                this.__preRoutingMiddleware.add(d, c);
             } catch (e) {
                 throw e instanceof CLIMachs.errors.ConflictError && (e.message = 'The "' + a + '" pre-routing middleware already exists, so it cannot be added.'), 
                 e;
@@ -573,7 +577,7 @@ CLIMachs.collections.Callback = function() {
         key: "removeCommand",
         value: function(a) {
             try {
-                this.commands.remove(a);
+                this.__commands.remove(a);
             } catch (b) {
                 throw b instanceof CLIMachs.errors.NotFoundError && (b.message = "The " + a + " command could not be found, so it cannot be removed."), 
                 b;
@@ -588,7 +592,7 @@ CLIMachs.collections.Callback = function() {
             });
             if (b.length > 0) throw new CLIMachs.errors.DependencyError("The " + a + " permission group cannotnot be removed because one or more commands depend upon it. Commands:" + b);
             try {
-                this.permissionGroups.remove(a);
+                this.__permissionGroups.remove(a);
             } catch (c) {
                 throw c instanceof CLIMachs.errors.NotFoundError && (c.message = 'The "' + a + '" group command could not be found, so it cannot be removed.'), 
                 c;
@@ -599,7 +603,7 @@ CLIMachs.collections.Callback = function() {
         key: "removePreCommandMiddleware",
         value: function(a) {
             try {
-                this.preCommandMiddleware.remove(a);
+                this.__preCommandMiddleware.remove(a);
             } catch (b) {
                 throw b instanceof CLIMachs.errors.NotFoundError && (b.message = 'The "' + a + '" pre-command middleware could not be found, so it cannot be removed.'), 
                 b;
@@ -610,7 +614,7 @@ CLIMachs.collections.Callback = function() {
         key: "removePreResponseMiddleware",
         value: function(a) {
             try {
-                this.preResponseMiddleware.remove(a);
+                this.__preResponseMiddleware.remove(a);
             } catch (b) {
                 throw b instanceof CLIMachs.errors.NotFoundError && (b.message = 'The "' + a + '" pre-response middleware could not be found, so it cannot be removed.'), 
                 b;
@@ -621,7 +625,7 @@ CLIMachs.collections.Callback = function() {
         key: "removePreRoutingMiddleware",
         value: function(a) {
             try {
-                this.preRoutingMiddleware.remove(a);
+                this.__preRoutingMiddleware.remove(a);
             } catch (b) {
                 throw b instanceof CLIMachs.errors.NotFoundError && (b.message = 'The "' + a + '" pre-routing middleware could not be found, so it cannot be removed.'), 
                 b;
@@ -647,7 +651,7 @@ CLIMachs.collections.Callback = function() {
             if (a.filter(function(a) {
                 return "string" != typeof a;
             }) > 0) throw new CLIMachs.errors.ArgumentError("tokens must contain only strings!");
-            var d = this.preRoutingMiddleware.forEach(function(c) {
+            var d = this.__preRoutingMiddleware.forEach(function(c) {
                 return c.callback(a, b);
             }).map(function(c) {
                 return c.callback(a, b);
@@ -657,13 +661,13 @@ CLIMachs.collections.Callback = function() {
             if (!d) throw new Error("Operation aborted by middleware before message routing.");
             var e = c(a, null, this.commands);
             if (!e) throw new CLIMachs.errors.NotFoundError("Command not found.");
-            var f = this.preCommandMiddleware.map(function(c) {
+            var f = this.__preCommandMiddleware.map(function(c) {
                 return c.callback(e, a, b);
             }).reduce(function(a, b) {
                 return a ? a && b : !1;
             }, !0);
             if (!f) throw new Error("Operation aborted by middleware before command execution.");
-            var g = e.execute(a, b), h = this.preResponseMiddleware.map(function(a) {
+            var g = e.execute(a, b), h = this.__preResponseMiddleware.map(function(a) {
                 return a.callback(g, b);
             }).reduce(function(a, b) {
                 return a ? a && b : !1;
@@ -730,27 +734,27 @@ CLIMachs.collections.Callback = function() {
     }, {
         key: "commands",
         get: function() {
-            return this.commands.data;
+            return this.__commands.data;
         }
     }, {
         key: "permissionGroups",
         get: function() {
-            return this.permissionGroups.data;
+            return this.__permissionGroups.data;
         }
     }, {
         key: "preCommandMiddleware",
         get: function() {
-            return this.preCommandMiddleware.data;
+            return this.__preCommandMiddleware.data;
         }
     }, {
         key: "preResponseMiddleware",
         get: function() {
-            return this.preResponseMiddleware.data;
+            return this.__preResponseMiddleware.data;
         }
     }, {
         key: "preRoutingMiddleware",
         get: function() {
-            return this.preRoutingMiddleware.data;
+            return this.__preRoutingMiddleware.data;
         }
     }, {
         key: "allCommands",
@@ -760,7 +764,7 @@ CLIMachs.collections.Callback = function() {
                     return b.concat(a(b, c.subcommands));
                 });
             }
-            return a([], this.commands);
+            return a([], this.__commands);
         }
     } ]), a;
 }(), function() {
