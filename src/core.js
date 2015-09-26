@@ -51,10 +51,6 @@ const CLIMachs = {
           if ( typeof( key ) !== 'string' ) {
             throw new CLIMachs.type.ArgumentError( 'key must be a valid string!' );
           }
-            if ( !/['"]/g.test( key ) ) {
-              throw new CLIMachs.type.ArgumentError( 'key must not contain any ' + 
-                'single-quotes or double-quotes!' );
-            }
 
           this.__fn = fn;
           this.__key = key;
@@ -156,12 +152,6 @@ const CLIMachs = {
         add ( item, index = -1 ) {
 
           // Validate inputs.
-          if ( typeof( item ) !== 'object' ) {
-            throw new CLIMachs.errors.ArgumentError( 'item must be a valid object!' );
-          }
-          if ( !item.key ) {
-            throw new CLIMachs.errors.ArgumentError( 'item must have a key property!' );
-          }
           if ( typeof( index ) !== 'number' ) {
             throw new CLIMachs.errors.ArgumentError( 'index must be a valid number!' );
           }
@@ -173,7 +163,7 @@ const CLIMachs = {
           const matchIndex = this.__data.findIndex( item );
           if ( matchIndex > -1 ) {
             throw new CLIMachs.errors.ConflictError( `An item already exists with a value of ` + 
-              `${ item.key }.` );
+              `${ item }.` );
           }
 
           // Insert the item into the data array at the requested index.
@@ -232,34 +222,34 @@ const CLIMachs = {
          * @classdesc A simple collection designed to maintain the uniqueness of the "key" property 
          * of any items it contains.
          * 
-         * @param {string} keyProp
-         * The name of the property to use as the unique key for sorting the collection.
+         * @param {string} sortKey
+         * The name of the property to use as the unique key for finding elements.
          * 
          * @param {function} [sortingFunction = null]
          * A function used to re-sort the data array after each time an item is added. A value of 
-         * null indicates that no sorting is applied.
+         * null indicates that no sorting is applied automatically.
          */
-        constructor ( keyProperty, sortingFunction = null ) {
+        constructor ( sortKey, sortingFunction = null ) {
 
-          if ( typeof( keyProperty ) !== 'string' ) {
-            throw new CLIMachs.errors.ArgumentError( 'keyProperty must be a valid string!' );
+          if ( typeof( sortKey ) !== 'string' ) {
+            throw new CLIMachs.errors.ArgumentError( 'sortKey must be a valid string!' );
           }
 
           super( sortingFunction );
 
-          this.__keyProperty = keyProperty;
+          this.__sortKey = sortKey;
 
         }
 
       // Fields
 
         /**
-         * @member {string} keyProperty
+         * @member {string} sortKey
          * @instance
          * @memberof CLIMachs.collections.UniqueKeyedCollection
          * @description The name of the property to use as the unique key.
          */
-        get keyProperty () { return this.__keyProperty; }
+        get sortKey () { return this.__sortKey; }
 
       // Public Functions
 
@@ -284,8 +274,8 @@ const CLIMachs = {
           if ( typeof( item ) !== 'object' ) {
             throw new CLIMachs.errors.ArgumentError( 'item must be a valid object!' );
           }
-          if ( typeof( item[ this.__keyProperty ] ) !== 'undefined' ) {
-            throw new CLIMachs.errors.ArgumentError( `item must have a ${ this.__keyProperty }` + 
+          if ( typeof( item[ this.__sortKey ] ) !== 'undefined' ) {
+            throw new CLIMachs.errors.ArgumentError( `item must have a ${ this.__sortKey }` + 
               `property!` );
           }
           if ( typeof( index ) !== 'number' ) {
@@ -297,10 +287,10 @@ const CLIMachs = {
 
           // Block items with keys already in the data array from being re-added.
           const matches = this.__data
-            .filter( x => x[ this.__keyProperty ] === item[ this.__keyProperty ] );
+            .filter( x => x[ this.__sortKey ] === item[ this.__sortKey ] );
           if ( matches.length > 0 ) {
             throw new CLIMachs.errors.ConflictError( `An item already exists with a unique key` + 
-              `of ${ item[ this.__keyProperty ] }.` );
+              `of ${ item[ this.__sortKey ] }.` );
           }
 
           // Insert the item into the data array at the requested index.
@@ -335,8 +325,8 @@ const CLIMachs = {
 
           // Check if the given key matches any elements (it should only match one).
           const matches = this.__data
-            .map( ( x, i ) => { return { key: x[ this.__keyProperty ], index: i }; } )
-            .filter( x => x[ this.__keyProperty ] === key );
+            .map( ( x, i ) => { return { key: x[ this.__sortKey ], index: i }; } )
+            .filter( x => x[ this.__sortKey ] === key );
 
           if ( matches.length === 0 ) {
             throw new CLIMachs.errors.NotFoundError( `No item could be found with a unique key` + 

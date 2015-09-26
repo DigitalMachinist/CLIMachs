@@ -1,4 +1,4 @@
-/*! 2015-09-24 -- CLIMachs Roll20 Command Framework (v0.0.1) -- See https://github.com/DigitalMachinist/CLIMachs.git for the full source code. */
+/*! 2015-09-25 -- CLIMachs Roll20 Command Framework (v0.0.1) -- See https://github.com/DigitalMachinist/CLIMachs.git for the full source code. */
 "use strict";
 
 function _inherits(a, b) {
@@ -52,7 +52,6 @@ CLIMachs.collections.Callback = function() {
     function a(b, c) {
         if (_classCallCheck(this, a), "function" != typeof c) throw new CLIMachs.type.ArgumentError("fn must be a valid function!");
         if ("string" != typeof b) throw new CLIMachs.type.ArgumentError("key must be a valid string!");
-        if (!/['"]/g.test(b)) throw new CLIMachs.type.ArgumentError("key must not contain any single-quotes or double-quotes!");
         this.__fn = c, this.__key = b;
     }
     return _createClass(a, [ {
@@ -76,12 +75,10 @@ CLIMachs.collections.Callback = function() {
         key: "add",
         value: function(a) {
             var b = arguments.length <= 1 || void 0 === arguments[1] ? -1 : arguments[1];
-            if ("object" != typeof a) throw new CLIMachs.errors.ArgumentError("item must be a valid object!");
-            if (!a.key) throw new CLIMachs.errors.ArgumentError("item must have a key property!");
             if ("number" != typeof b) throw new CLIMachs.errors.ArgumentError("index must be a valid number!");
             if (-1 > b || b >= this.__data.length) throw new CLIMachs.errors.ArgumentError("index out of range!");
             var c = this.__data.findIndex(a);
-            if (c > -1) throw new CLIMachs.errors.ConflictError("An item already exists with a value of " + (a.key + "."));
+            if (c > -1) throw new CLIMachs.errors.ConflictError("An item already exists with a value of " + (a + "."));
             -1 === b ? this.__data.splice(b, 0, a) : this.__data.push(a), this.__sortingFunction && this.__data.sort(this.__sortingFunction);
         }
     }, {
@@ -109,21 +106,21 @@ CLIMachs.collections.Callback = function() {
 }(), CLIMachs.collections.UniqueKeyedCollection = function(a) {
     function b(a) {
         var c = arguments.length <= 1 || void 0 === arguments[1] ? null : arguments[1];
-        if (_classCallCheck(this, b), "string" != typeof a) throw new CLIMachs.errors.ArgumentError("keyProperty must be a valid string!");
-        _get(Object.getPrototypeOf(b.prototype), "constructor", this).call(this, c), this.__keyProperty = a;
+        if (_classCallCheck(this, b), "string" != typeof a) throw new CLIMachs.errors.ArgumentError("sortKey must be a valid string!");
+        _get(Object.getPrototypeOf(b.prototype), "constructor", this).call(this, c), this.__sortKey = a;
     }
     return _inherits(b, a), _createClass(b, [ {
         key: "add",
         value: function(a) {
             var b = this, c = arguments.length <= 1 || void 0 === arguments[1] ? -1 : arguments[1];
             if ("object" != typeof a) throw new CLIMachs.errors.ArgumentError("item must be a valid object!");
-            if ("undefined" != typeof a[this.__keyProperty]) throw new CLIMachs.errors.ArgumentError("item must have a " + this.__keyProperty + "property!");
+            if ("undefined" != typeof a[this.__sortKey]) throw new CLIMachs.errors.ArgumentError("item must have a " + this.__sortKey + "property!");
             if ("number" != typeof c) throw new CLIMachs.errors.ArgumentError("index must be a valid number!");
             if (-1 > c || c >= this.__data.length) throw new CLIMachs.errors.ArgumentError("index out of range!");
             var d = this.__data.filter(function(c) {
-                return c[b.__keyProperty] === a[b.__keyProperty];
+                return c[b.__sortKey] === a[b.__sortKey];
             });
-            if (d.length > 0) throw new CLIMachs.errors.ConflictError("An item already exists with a unique key" + ("of " + a[this.__keyProperty] + "."));
+            if (d.length > 0) throw new CLIMachs.errors.ConflictError("An item already exists with a unique key" + ("of " + a[this.__sortKey] + "."));
             -1 === c ? this.__data.splice(c, 0, a) : this.__data.push(a), this.__sortingFunction && this.__data.sort(this.__sortingFunction);
         }
     }, {
@@ -131,19 +128,19 @@ CLIMachs.collections.Callback = function() {
         value: function(a) {
             var b = this, c = this.__data.map(function(a, c) {
                 return {
-                    key: a[b.__keyProperty],
+                    key: a[b.__sortKey],
                     index: c
                 };
             }).filter(function(c) {
-                return c[b.__keyProperty] === a;
+                return c[b.__sortKey] === a;
             });
             if (0 === c.length) throw new CLIMachs.errors.NotFoundError("No item could be found with a unique key" + ("of " + a + "."));
             return this.__data.splice(c[0].index, 1);
         }
     }, {
-        key: "keyProperty",
+        key: "sortKey",
         get: function() {
-            return this.__keyProperty;
+            return this.__sortKey;
         }
     } ]), b;
 }(CLIMachs.collections.UniqueCollection), CLIMachs.errors.ArgumentError = function(a) {
